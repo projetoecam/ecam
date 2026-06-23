@@ -1,0 +1,117 @@
+# 🚀 Projeto ECAM - Backend Mandato
+
+Este é o backend da aplicação desenvolvido em **Java 21** com **Spring Boot**, integrado ao banco de dados **SQL Server 2019**.
+
+---
+
+### 🛠️ Pré-requisitos na Máquina do Desenvolvedor
+
+Antes de iniciar, garanta que você tem instalado na sua máquina:
+
+1. **Java JDK 21**
+2. **Configuração do `JAVA_HOME`:**
+   * Instale o JDK 21.
+   * Acesse o diretório (ex: `C:\Program Files\Java\jdk-21`) e copie o caminho completo.
+   * Nas configurações do Windows, vá em "Variáveis de Ambiente", crie uma variável de usuário chamada `JAVA_HOME` e cole o caminho copiado no campo de valor.
+   * *Para testar:* Abra o Prompt de Comando (CMD) e execute os comandos:
+```cmd
+     java -version
+     echo %JAVA_HOME%
+     ```
+     O primeiro deve mostrar a versão 21 e o segundo deve retornar o caminho configurado.
+3. **SQL Server 2019** instalado localmente.
+4. **Postman** (para testes de API).
+
+---
+
+### 🗄️ Configuração do Banco de Dados
+
+1. Abra o seu SQL Server Management Studio e restaure a sua base de dados no formato `.bak`.
+2. Para garantir que o ambiente de testes inicie limpo, padronizado e com os geradores automáticos resetados, execute o script de limpeza e reseed abaixo dentro do banco **DB_MANDATO**:
+
+```sql
+USE [DB_MANDATO];
+GO
+
+-- 1. Desativa temporariamente todas as verificações de Chaves Estrangeiras do banco
+EXEC sp_MSforeachtable "ALTER TABLE ? NOCHECK CONSTRAINT ALL";
+GO
+
+-- 2. Apaga os dados de absolutamente todas as tabelas do seu banco
+EXEC sp_MSforeachtable "DELETE FROM ?";
+GO
+
+-- 3. Reseta o contador IDENTITY de todas as tabelas para iniciar do 0 
+-- (Assim, o próximo insert que o Java fizer começará obrigatoriamente no ID 1)
+EXEC sp_MSforeachtable "IF OBJECTPROPERTY(OBJECT_ID('?'), 'TableHasIdentity') = 1 DBCC CHECKIDENT ('?', RESEED, 0)";
+GO
+
+-- 4. Reativa todas as verificações de Chaves Estrangeiras, limpando a memória do banco
+EXEC sp_MSforeachtable "ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL";
+GO
+
+PRINT '=== BANCO DE DADOS RESETADO E ZERADO COM SUCESSO! ===';
+```
+
+---
+
+### 🔐 Criar Variáveis de Ambiente (Segurança)
+
+Para que a sua senha não fique salva no código e suba exposta para o repositório do GitHub, o projeto lê as credenciais diretamente do sistema operacional. 
+
+Abra o seu **Prompt de Comando (CMD)** e execute os comandos abaixo, substituindo pelos seus dados reais de acesso local:
+
+```cmd
+setx DB_USER "sa"
+setx DB_PASS "sua_senha_aqui"
+```
+
+> ⚠️ **Importante:** Após rodar os comandos `setx`, feche a janela atual do terminal e abra uma nova janela para que o Windows carregue as novas variáveis na memória do sistema.
+
+---
+
+### 🚀 Executando o Projeto
+
+Com as variáveis configuradas e o banco de dados limpo, abra o terminal na pasta raiz do projeto backend e execute o comando do Maven:
+
+```cmd
+mvnw spring-boot:run
+```
+
+O projeto iniciará uma rotina automatizada (`DataLoader`) que vai detectar que as tabelas base estão limpas e inserirá de forma automática os primeiros registros de teste estruturais (Município Padrão, Bairro Padrão, Comunidade Padrão e o Usuário Operador "José"), todos recebendo obrigatoriamente o **ID 1** do gerador do banco.
+
+---
+
+### 🧪 Teste Inicial da API no Postman
+
+Para certificar-se de que a comunicação com o SQL Server está perfeita, configure uma nova requisição no Postman com os seguintes parâmetros:
+
+* **Método:** `POST`
+* **URL:** `http://localhost:8080/pessoas`
+* **Headers:** Adicione a chave `Content-Type` com o valor `application/json`
+* **Body:** Selecione a opção **raw** e mude o tipo para **JSON**. Em seguida, cole a estrutura abaixo:
+
+```json
+{
+  "nomeCompleto": "Carlos Andrade",
+  "cpf": "12345678901",
+  "tituloEleitor": "123456789012",
+  "nomeDaMae": "Maria Andrade",
+  "dataNascimento": "1990-05-15",
+  "telefone": "81999999999",
+  "whatsapp": "81999999999",
+  "enderecoCompleto": "Rua Exemplo, 123",
+  
+  "comunidade": {
+      "id": 1
+  }, 
+  
+  "operadorCadastro": {
+      "id": 1
+  },
+  
+  "origenCadastro": "Aplicativo",
+  "status": "Ativo",
+  "sexo": "M"
+}
+```
