@@ -1,7 +1,7 @@
 package com.ecam.ecam.Cadastros.controller;
 
-import com.ecam.ecam.Cadastros.dto.MunicipioDTO;
-import com.ecam.ecam.Cadastros.services.MunicipioService;
+import com.ecam.ecam.Cadastros.dto.MacroRegiaoDTO;
+import com.ecam.ecam.Cadastros.services.MacroRegiaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,19 +10,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/municipios")
-public class MunicipioController {
+@RequestMapping("/api/macro-regioes")
+public class MacroRegiaoController {
 
     @Autowired
-    private MunicipioService service;
+    private MacroRegiaoService service;
 
     @GetMapping
-    public ResponseEntity<List<MunicipioDTO>> listarTodos() {
-        return ResponseEntity.ok(service.listarTodos());
+    public ResponseEntity<List<MacroRegiaoDTO>> listarTodas() {
+        return ResponseEntity.ok(service.listarTodas());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MunicipioDTO> buscarPorId(@PathVariable Integer id) {
+    public ResponseEntity<MacroRegiaoDTO> buscarPorId(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(service.buscarPorId(id));
         } catch (RuntimeException e) {
@@ -31,13 +31,13 @@ public class MunicipioController {
     }
 
     @PostMapping
-    public ResponseEntity<MunicipioDTO> salvar(@RequestBody MunicipioDTO dto) {
-        MunicipioDTO novoMunicipio = service.salvar(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoMunicipio);
+    public ResponseEntity<MacroRegiaoDTO> salvar(@RequestBody MacroRegiaoDTO dto) {
+        MacroRegiaoDTO novaMacroRegiao = service.salvar(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novaMacroRegiao);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MunicipioDTO> atualizar(@PathVariable Integer id, @RequestBody MunicipioDTO dto) {
+    public ResponseEntity<MacroRegiaoDTO> atualizar(@PathVariable Integer id, @RequestBody MacroRegiaoDTO dto) {
         try {
             return ResponseEntity.ok(service.atualizar(id, dto));
         } catch (RuntimeException e) {
