@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MunicipioRepository extends JpaRepository<Municipio, Integer> {
-    // O Spring implementa automaticamente
-    boolean existsByNomeAndUf(String nome, String uf);
+    // Você pode adicionar buscas customizadas depois, como buscar por UF, por exemplo:
+    // List<Municipio> findByUf(String uf);
 }

@@ -1,50 +1,67 @@
 package com.ecam.ecam.Cadastros.services;
 
-
-
-import com.ecam.ecam.Cadastros.dto.MunicipioRequest;
-import com.ecam.ecam.Cadastros.dto.MunicipioResponse;
+import com.ecam.ecam.Cadastros.dto.MunicipioDTO;
 import com.ecam.ecam.Cadastros.model.Municipio;
 import com.ecam.ecam.Cadastros.repository.MunicipioRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class MunicipioService {
 
-    private final MunicipioRepository repository;
+    @Autowired
+    private MunicipioRepository repository;
 
-    @Transactional
-    public MunicipioResponse criar(MunicipioRequest request) {
-        if (repository.existsByNomeAndUf(request.nome(), request.uf())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Município já cadastrado nesta UF.");
-        }
+    public List<MunicipioDTO> listarTodos() {
+        return repository.findAll().stream()
+                .map(this::converterParaDTO)
+                .collect(Collectors.toList());
+    }
 
-        Municipio municipio = Municipio.builder()
-                .nome(request.nome())
-                .uf(request.uf() != null ? request.uf().toUpperCase() : "PE")
+    public MunicipioDTO buscarPorId(Integer id) {
+        Municipio entidade = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Município não encontrado!"));
+        return converterParaDTO(entidade);
+    }
+
+    public MunicipioDTO salvar(MunicipioDTO dto) {
+        Municipio entidade = converterParaEntidade(dto);
+        entidade = repository.save(entidade);
+        return converterParaDTO(entidade);
+    }
+
+    public MunicipioDTO atualizar(Integer id, MunicipioDTO dto) {
+        Municipio entidadeExistente = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Município não encontrado!"));
+
+        entidadeExistente.setNome(dto.getNome());
+        entidadeExistente.setUf(dto.getUf());
+
+        return converterParaDTO(repository.save(entidadeExistente));
+    }
+
+    public void deletar(Integer id) {
+        repository.deleteById(id);
+    }
+
+    // --- Métodos de Conversão ---
+
+    private MunicipioDTO converterParaDTO(Municipio entidade) {
+        return MunicipioDTO.builder()
+                .id(entidade.getId())
+                .nome(entidade.getNome())
+                .uf(entidade.getUf())
                 .build();
-
-        municipio = repository.save(municipio);
-        return MunicipioResponse.fromEntity(municipio);
     }
 
-    @Transactional(readOnly = true)
-    public MunicipioResponse buscarPorId(Integer id) {
-        return repository.findById(id)
-                .map(MunicipioResponse::fromEntity)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Município não encontrado."));
-    }
-
-    @Transactional(readOnly = true)
-    public Page<MunicipioResponse> listarTodos(Pageable pageable) {
-        return repository.findAll(pageable)
-                .map(MunicipioResponse::fromEntity);
+    private Municipio converterParaEntidade(MunicipioDTO dto) {
+        return Municipio.builder()
+                .id(dto.getId())
+                .nome(dto.getNome())
+                .uf(dto.getUf())
+                .build();
     }
 }
