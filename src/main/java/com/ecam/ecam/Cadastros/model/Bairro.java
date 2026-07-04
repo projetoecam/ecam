@@ -6,13 +6,15 @@ import lombok.*;
 
 
 @Entity
-@Table(name = "tb_municipio")
+@Table(name = "tb_bairro")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Municipio {
+
+public class Bairro {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +23,8 @@ public class Municipio {
     @Column(nullable = false, length = 100)
     private String nome;
 
-    @Column(length = 2)
-    private String uf;
-} 
-
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "id_macro_regiao", nullable = false)
+   private MacroRegiao macroRegiao;
+    
+}
