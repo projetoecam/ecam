@@ -30,12 +30,13 @@ public class SecurityFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         var token = recuperarToken(request);
 
         if (token != null) {
             DecodedJWT decodedJWT = tokenService.validarToken(token);
-            
+
             if (decodedJWT != null) {
                 String login = decodedJWT.getSubject();
                 String tokenSessao = decodedJWT.getClaim("codigoSessao").asString();
@@ -46,7 +47,8 @@ public class SecurityFilter extends OncePerRequestFilter {
                     Usuario usuario = usuarioOpt.get();
 
                     if (tokenSessao.equals(usuario.getCodigo_sessao())) {
-                        var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + usuario.getPerfil()));
+                        var authorities = Collections
+                                .singletonList(new SimpleGrantedAuthority("ROLE_" + usuario.getPerfil().toUpperCase()));
                         var authentication = new UsernamePasswordAuthenticationToken(usuario, null, authorities);
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
@@ -58,7 +60,8 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     private String recuperarToken(HttpServletRequest request) {
         var authHeader = request.getHeader("Authorization");
-        if (authHeader == null) return null;
+        if (authHeader == null)
+            return null;
         return authHeader.replace("Bearer ", "");
     }
 }
