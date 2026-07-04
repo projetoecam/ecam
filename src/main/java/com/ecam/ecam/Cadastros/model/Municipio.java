@@ -3,6 +3,8 @@ package com.ecam.ecam.Cadastros.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+
+
 @Entity
 @Table(name = "tb_municipio")
 @Getter
@@ -21,4 +23,5 @@ public class Municipio {
 
     @Column(length = 2)
     private String uf;
-}
+} 
+
