@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/v1/municipios")
@@ -37,7 +40,8 @@ public class MunicipioController {
     public ResponseEntity<MunicipioResponse> buscarPorId(@PathVariable Integer id) {
         return ResponseEntity.ok(service.buscarPorId(id));
     }
-
+   
+    
     @GetMapping
     public ResponseEntity<Page<MunicipioResponse>> listarTodos(Pageable pageable) {
         // Exemplo de uso: /api/v1/municipios?page=0&size=10&sort=nome,asc
