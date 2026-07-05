@@ -54,4 +54,22 @@ public class UsuarioService {
         
         usuarioRepository.save(novoUsuario);
     }
+
+    public Usuario atualizarUsuario(Long id, UsuarioDTO dto) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+
+        usuario.setNome(dto.getNome());
+        usuario.setPerfil(dto.getPerfil());
+        usuario.setAtivo(dto.isAtivo()); 
+        if (dto.getSenha_hash() != null && !dto.getSenha_hash().trim().isEmpty()) {
+            usuario.setSenha_hash(passwordEncoder.encode(dto.getSenha_hash()));
+        }
+
+        return usuarioRepository.save(usuario);
+    }
+
+    public void deletarUsuario(Long id) {
+        usuarioRepository.deleteById(id);
+    }
 }
