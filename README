@@ -76,6 +76,7 @@ Com as variáveis configuradas e o banco de dados limpo, abra o terminal na past
 
 ```cmd
 mvnw spring-boot:run
+mvnw spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
 O projeto iniciará uma rotina automatizada (`DataLoader`) que vai detectar que as tabelas base estão limpas e inserirá de forma automática os primeiros registros de teste estruturais (Município Padrão, Bairro Padrão, Comunidade Padrão e o Usuário Operador "José"), todos recebendo obrigatoriamente o **ID 1** do gerador do banco.
