@@ -1,6 +1,6 @@
 package com.ecam.ecam.Cadastros.model;
 import com.ecam.ecam.login.model.Usuario;
-import com.ecam.ecam.Cadastros.model.Comunidade;
+
 
 
 import jakarta.persistence.*;
