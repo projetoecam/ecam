@@ -28,8 +28,16 @@ public class Usuario {
 
     }
 
+     public Long getId() {
+        return id;
+    }
+
     public String getNome() {
         return nome;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setNome(String nome) {
