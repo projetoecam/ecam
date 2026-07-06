@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Setter
 @NoArgsConstructor
+
 public class Usuario {
 
     @Id
@@ -30,5 +31,34 @@ public class Usuario {
     private boolean ativo;
     private Date data_criacao;
     private String codigo_sessao;
+    
+
+     public Long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getLogin_usuario() {
+        return login_usuario;
+    }
+
+    public void setLogin_usuario(String login_usuario) {
+        this.login_usuario = login_usuario;
+    }
+
+    public String getSenha_hash() {
+        return senha_hash;
+    }
 
 }
