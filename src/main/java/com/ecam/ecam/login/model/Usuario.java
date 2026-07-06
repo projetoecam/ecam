@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Setter
 @NoArgsConstructor
+
 public class Usuario {
 
     @Id
@@ -31,10 +32,6 @@ public class Usuario {
     private Date data_criacao;
     private String codigo_sessao;
     
-
-    public Usuario() {
-
-    }
 
      public Long getId() {
         return id;
