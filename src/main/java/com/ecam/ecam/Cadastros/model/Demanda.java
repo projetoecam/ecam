@@ -36,12 +36,6 @@ public class Demanda {
     @JoinColumn(name = "id_lider_responsavel")
     private Pessoa liderResponsavel;
 
-    @Column(name = "tipo_demanda", nullable = false, length = 100)
-    private String tipoDemanda;
-
-    @Column(name = "descricao_demanda", nullable = false, columnDefinition = "VARCHAR(MAX)")
-    private String descricaoDemanda;
-
     @Column(name = "orgao_responsavel", length = 150)
     private String orgaoResponsavel;
 

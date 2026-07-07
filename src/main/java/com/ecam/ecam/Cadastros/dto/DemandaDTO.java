@@ -16,8 +16,6 @@ public class DemandaDTO {
     private Integer idSolicitante;
     private Integer idComunidade;
     private Integer idLiderResponsavel;
-    private String tipoDemanda;
-    private String descricaoDemanda;
     private String orgaoResponsavel;
     private String status;
     private LocalDate dataSolicitacao;
