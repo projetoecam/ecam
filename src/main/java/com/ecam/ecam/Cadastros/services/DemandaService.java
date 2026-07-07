@@ -42,8 +42,6 @@ public class DemandaService {
 
         entidadeExistente.setNumeroSequencial(dto.getNumeroSequencial());
         entidadeExistente.setAno(dto.getAno());
-        entidadeExistente.setTipoDemanda(dto.getTipoDemanda());
-        entidadeExistente.setDescricaoDemanda(dto.getDescricaoDemanda());
         entidadeExistente.setOrgaoResponsavel(dto.getOrgaoResponsavel());
         entidadeExistente.setStatus(dto.getStatus());
         entidadeExistente.setDataSolicitacao(dto.getDataSolicitacao());
@@ -91,8 +89,6 @@ public class DemandaService {
                 .idSolicitante(entidade.getSolicitante() != null ? entidade.getSolicitante().getId() : null)
                 .idComunidade(entidade.getComunidade() != null ? entidade.getComunidade().getId() : null)
                 .idLiderResponsavel(entidade.getLiderResponsavel() != null ? entidade.getLiderResponsavel().getId() : null)
-                .tipoDemanda(entidade.getTipoDemanda())
-                .descricaoDemanda(entidade.getDescricaoDemanda())
                 .orgaoResponsavel(entidade.getOrgaoResponsavel())
                 .status(entidade.getStatus())
                 .dataSolicitacao(entidade.getDataSolicitacao())
@@ -105,8 +101,6 @@ public class DemandaService {
                 .id(dto.getId())
                 .numeroSequencial(dto.getNumeroSequencial())
                 .ano(dto.getAno())
-                .tipoDemanda(dto.getTipoDemanda())
-                .descricaoDemanda(dto.getDescricaoDemanda())
                 .orgaoResponsavel(dto.getOrgaoResponsavel())
                 .status(dto.getStatus())
                 .dataSolicitacao(dto.getDataSolicitacao())
