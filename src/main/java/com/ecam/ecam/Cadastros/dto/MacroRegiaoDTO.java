@@ -10,7 +10,8 @@ import lombok.*;
 public class MacroRegiaoDTO {
 
     private Integer id;
-    private Integer idMunicipio; 
+    private Integer idMunicipio;
+    private String nomeMunicipio; 
     private String nome;
     private String regiaoApelido;
     
