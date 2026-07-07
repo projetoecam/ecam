@@ -41,7 +41,6 @@ public class MacroRegiaoService {
         entidadeExistente.setNome(dto.getNome());
         entidadeExistente.setRegiao_apelido(dto.getRegiaoApelido());
         
-        // Atualiza a referência do Município, se o ID for fornecido
         if (dto.getIdMunicipio() != null) {
             Municipio municipio = new Municipio();
             municipio.setId(dto.getIdMunicipio());
@@ -55,15 +54,13 @@ public class MacroRegiaoService {
         repository.deleteById(id);
     }
 
-    // --- Métodos de Conversão ---
-
     private MacroRegiaoDTO converterParaDTO(MacroRegiao entidade) {
         return MacroRegiaoDTO.builder()
                 .id(entidade.getId())
                 .nome(entidade.getNome())
                 .regiaoApelido(entidade.getRegiao_apelido())
-                // Pega o ID do município apenas se a entidade município não for nula
                 .idMunicipio(entidade.getMunicipio() != null ? entidade.getMunicipio().getId() : null)
+                .nomeMunicipio(entidade.getMunicipio() != null ? entidade.getMunicipio().getNome() : null) 
                 .build();
     }
 
@@ -74,7 +71,6 @@ public class MacroRegiaoService {
                 .regiao_apelido(dto.getRegiaoApelido())
                 .build();
 
-        // Cria uma referência do Município usando apenas o ID
         if (dto.getIdMunicipio() != null) {
             Municipio municipio = new Municipio();
             municipio.setId(dto.getIdMunicipio());
