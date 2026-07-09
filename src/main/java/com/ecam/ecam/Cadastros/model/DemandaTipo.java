@@ -19,7 +19,6 @@ public class DemandaTipo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    // Relacionamento obrigatório com Demanda (carregamento LAZY para performance)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_demanda", nullable = false)
     private Demanda demanda;

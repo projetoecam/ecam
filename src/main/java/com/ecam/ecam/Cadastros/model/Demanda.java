@@ -8,9 +8,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Entidade principal de Demanda que gerencia as solicitações.
- */
 @Entity
 @Table(name = "tb_demanda")
 @Getter
@@ -61,14 +58,11 @@ public class Demanda {
     @JoinColumn(name = "id_operador", nullable = false)
     private Usuario operador;
 
-    // Relacionamento 1-para-Muitos: Quando deletar a Demanda, deleta os Tipos associados.
     @OneToMany(mappedBy = "demanda", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<DemandaTipo> tipos = new ArrayList<>();
 
-    /**
-     * Método utilitário para garantir o vínculo bidirecional.
-     */
+  
     public void adicionarTipo(DemandaTipo tipo){
         tipos.add(tipo);
         tipo.setDemanda(this);
