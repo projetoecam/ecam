@@ -1,10 +1,16 @@
 package com.ecam.ecam.Cadastros.model;
-import com.ecam.ecam.login.model.Usuario;
 
+import com.ecam.ecam.login.model.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDate;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Entidade principal de Demanda que gerencia as solicitações.
+ */
 @Entity
 @Table(name = "tb_demanda")
 @Getter
@@ -39,7 +45,7 @@ public class Demanda {
     @Column(name = "tipo_demanda", nullable = false, length = 100)
     private String tipoDemanda;
 
-    @Column(name = "descricao_demanda", nullable = false, columnDefinition = "VARCHAR(MAX)")
+    @Column(name = "descricao_demanda", nullable = false, columnDefinition = "TEXT")
     private String descricaoDemanda;
 
     @Column(name = "orgao_responsavel", length = 150)
@@ -55,4 +61,16 @@ public class Demanda {
     @JoinColumn(name = "id_operador", nullable = false)
     private Usuario operador;
 
+    // Relacionamento 1-para-Muitos: Quando deletar a Demanda, deleta os Tipos associados.
+    @OneToMany(mappedBy = "demanda", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<DemandaTipo> tipos = new ArrayList<>();
+
+    /**
+     * Método utilitário para garantir o vínculo bidirecional.
+     */
+    public void adicionarTipo(DemandaTipo tipo){
+        tipos.add(tipo);
+        tipo.setDemanda(this);
+    }
 }

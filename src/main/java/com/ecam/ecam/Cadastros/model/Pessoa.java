@@ -27,7 +27,7 @@ public class Pessoa {
     @Column(nullable = false, length = 14)
     private String cpf;
 
-    @Column(name = "titulo_eleitor", nullable = false, length = 20)
+    @Column(name = "titulo_eleitor", nullable = true, length = 20)
     private String tituloEleitor;
 
     @Column(name = "nome_mae", nullable = false, length = 200)
