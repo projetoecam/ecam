@@ -30,7 +30,7 @@ public class Lideranca {
     @Column(name = "qtd_pessoas_mobiliza")
     private Integer qtdPessoasMobiliza;
 
-    @Column(name = "historico_politico", columnDefinition = "VARCHAR(MAX)")
+    @Column(name = "historico_politico", columnDefinition = "TEXT")
     private String historicoPolitico;
 
 }

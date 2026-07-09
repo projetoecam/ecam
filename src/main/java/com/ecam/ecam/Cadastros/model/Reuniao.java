@@ -27,7 +27,7 @@ public class Reuniao {
     @Column(name = "tema_reuniao", nullable = false, length = 200)
     private String temaReuniao;
 
-    @Column(columnDefinition = "VARCHAR(MAX)")
+    @Column(columnDefinition = "TEXT")
     private String descricao;
 
     @ManyToOne(fetch = FetchType.LAZY)

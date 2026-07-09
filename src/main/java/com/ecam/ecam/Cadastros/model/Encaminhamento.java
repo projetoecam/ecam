@@ -31,10 +31,10 @@ public class Encaminhamento {
     @Column(name = "data_envio", nullable = false)
     private LocalDate dataEnvio;
 
-    @Column(name = "anexos_url", columnDefinition = "VARCHAR(MAX)")
+    @Column(name = "anexos_url", columnDefinition = "TEXT")
     private String anexosUrl;
 
-    @Column(name = "resposta_recebida", columnDefinition = "VARCHAR(MAX)")
+    @Column(name = "resposta_recebida", columnDefinition = "TEXT")
     private String respostaRecebida;
 
     @ManyToOne(fetch = FetchType.LAZY)
