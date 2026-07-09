@@ -1,9 +1,12 @@
 package com.ecam.ecam.Cadastros.model;
-import com.ecam.ecam.login.model.Usuario;
 
+import com.ecam.ecam.login.model.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_demanda")
@@ -36,6 +39,12 @@ public class Demanda {
     @JoinColumn(name = "id_lider_responsavel")
     private Pessoa liderResponsavel;
 
+    @Column(name = "tipo_demanda", nullable = false, length = 100)
+    private String tipoDemanda;
+
+    @Column(name = "descricao_demanda", nullable = false, columnDefinition = "TEXT")
+    private String descricaoDemanda;
+
     @Column(name = "orgao_responsavel", length = 150)
     private String orgaoResponsavel;
 
@@ -49,4 +58,13 @@ public class Demanda {
     @JoinColumn(name = "id_operador", nullable = false)
     private Usuario operador;
 
+    @OneToMany(mappedBy = "demanda", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<DemandaTipo> tipos = new ArrayList<>();
+
+  
+    public void adicionarTipo(DemandaTipo tipo){
+        tipos.add(tipo);
+        tipo.setDemanda(this);
+    }
 }

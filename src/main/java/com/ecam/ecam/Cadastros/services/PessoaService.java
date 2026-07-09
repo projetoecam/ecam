@@ -5,8 +5,11 @@ import com.ecam.ecam.Cadastros.model.Comunidade;
 import com.ecam.ecam.Cadastros.model.Pessoa;
 import com.ecam.ecam.login.model.Usuario;
 import com.ecam.ecam.Cadastros.repository.PessoaRepository;
+import com.ecam.ecam.Cadastros.repository.ComunidadeRepository;
+import com.ecam.ecam.login.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +20,12 @@ public class PessoaService {
 
     @Autowired
     private PessoaRepository repository;
+
+    @Autowired
+    private ComunidadeRepository comunidadeRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     public List<PessoaDTO> listarTodas() {
         return repository.findAll().stream()
@@ -30,18 +39,24 @@ public class PessoaService {
         return converterParaDTO(entidade);
     }
 
+    @Transactional
     public PessoaDTO salvar(PessoaDTO dto) {
         Pessoa entidade = converterParaEntidade(dto);
-        
-        // Define a data de cadastro automaticamente ao salvar, se estiver nula
+
+        if (entidade.getTituloEleitor() != null &&
+                (entidade.getTituloEleitor().equals("NAO_INFORMADO") || entidade.getTituloEleitor().isEmpty())) {
+            entidade.setTituloEleitor(null);
+        }
+
         if (entidade.getDataCadastro() == null) {
             entidade.setDataCadastro(LocalDateTime.now());
         }
-        
+
         entidade = repository.save(entidade);
         return converterParaDTO(entidade);
     }
 
+    @Transactional
     public PessoaDTO atualizar(Integer id, PessoaDTO dto) {
         Pessoa entidadeExistente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada!"));
@@ -94,8 +109,6 @@ public class PessoaService {
         repository.deleteById(id);
     }
 
-    // --- Métodos de Conversão ---
-
     private PessoaDTO converterParaDTO(Pessoa entidade) {
         return PessoaDTO.builder()
                 .id(entidade.getId())
@@ -110,7 +123,8 @@ public class PessoaService {
                 .enderecoCompleto(entidade.getEnderecoCompleto())
                 .cep(entidade.getCep())
                 .origemCadastro(entidade.getOrigemCadastro())
-                .idLiderResponsavel(entidade.getLiderResponsavel() != null ? entidade.getLiderResponsavel().getId() : null)
+                .idLiderResponsavel(
+                        entidade.getLiderResponsavel() != null ? entidade.getLiderResponsavel().getId() : null)
                 .idLiderRegional(entidade.getLiderRegional() != null ? entidade.getLiderRegional().getId() : null)
                 .status(entidade.getStatus())
                 .observacoes(entidade.getObservacoes())

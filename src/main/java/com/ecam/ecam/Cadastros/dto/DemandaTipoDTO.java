@@ -8,7 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class DemandaTipoDTO {
-
     private Integer id;
     private Integer idDemanda;
     private Boolean tipoSaude;
@@ -21,5 +20,4 @@ public class DemandaTipoDTO {
     private String descricaoTipoSeguranca;
     private Boolean tipoOutros;
     private String descricaoTipoOutros;
-
 }

@@ -6,21 +6,19 @@ import com.ecam.ecam.Cadastros.model.DemandaTipo;
 import com.ecam.ecam.Cadastros.repository.DemandaTipoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Serviço responsável pelas regras de negócio da entidade DemandaTipo.
+ */
 @Service
 public class DemandaTipoService {
 
     @Autowired
     private DemandaTipoRepository repository;
-
-    public List<DemandaTipoDTO> listarTodos() {
-        return repository.findAll().stream()
-                .map(this::converterParaDTO)
-                .collect(Collectors.toList());
-    }
 
     public List<DemandaTipoDTO> listarPorDemanda(Integer idDemanda) {
         return repository.findByDemandaId(idDemanda).stream()
@@ -28,42 +26,36 @@ public class DemandaTipoService {
                 .collect(Collectors.toList());
     }
 
-    public DemandaTipoDTO buscarPorId(Integer id) {
-        DemandaTipo entidade = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tipo de Demanda não encontrado!"));
-        return converterParaDTO(entidade);
-    }
-
+    @Transactional
     public DemandaTipoDTO salvar(DemandaTipoDTO dto) {
         DemandaTipo entidade = converterParaEntidade(dto);
-        entidade = repository.save(entidade);
-        return converterParaDTO(entidade);
+        return converterParaDTO(repository.save(entidade));
     }
 
+    @Transactional
     public DemandaTipoDTO atualizar(Integer id, DemandaTipoDTO dto) {
         DemandaTipo entidadeExistente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tipo de Demanda não encontrado!"));
-
+        
         entidadeExistente.setTipoSaude(dto.getTipoSaude());
         entidadeExistente.setDescricaoTipoSaude(dto.getDescricaoTipoSaude());
+        
         entidadeExistente.setTipoInfraestrutura(dto.getTipoInfraestrutura());
         entidadeExistente.setDescricaoTipoInfraestrutura(dto.getDescricaoTipoInfraestrutura());
+        
         entidadeExistente.setTipoEducacao(dto.getTipoEducacao());
         entidadeExistente.setDescricaoTipoEducacao(dto.getDescricaoTipoEducacao());
+        
         entidadeExistente.setTipoSeguranca(dto.getTipoSeguranca());
         entidadeExistente.setDescricaoTipoSeguranca(dto.getDescricaoTipoSeguranca());
+        
         entidadeExistente.setTipoOutros(dto.getTipoOutros());
         entidadeExistente.setDescricaoTipoOutros(dto.getDescricaoTipoOutros());
-
-        if (dto.getIdDemanda() != null) {
-            Demanda demanda = new Demanda();
-            demanda.setId(dto.getIdDemanda());
-            entidadeExistente.setDemanda(demanda);
-        }
-
+        
         return converterParaDTO(repository.save(entidadeExistente));
     }
 
+    @Transactional
     public void deletar(Integer id) {
         repository.deleteById(id);
     }
@@ -88,8 +80,12 @@ public class DemandaTipoService {
     }
 
     private DemandaTipo converterParaEntidade(DemandaTipoDTO dto) {
-        DemandaTipo entidade = DemandaTipo.builder()
+        Demanda demanda = new Demanda();
+        demanda.setId(dto.getIdDemanda());
+        
+        return DemandaTipo.builder()
                 .id(dto.getId())
+                .demanda(demanda)
                 .tipoSaude(dto.getTipoSaude())
                 .descricaoTipoSaude(dto.getDescricaoTipoSaude())
                 .tipoInfraestrutura(dto.getTipoInfraestrutura())
@@ -101,13 +97,5 @@ public class DemandaTipoService {
                 .tipoOutros(dto.getTipoOutros())
                 .descricaoTipoOutros(dto.getDescricaoTipoOutros())
                 .build();
-
-        if (dto.getIdDemanda() != null) {
-            Demanda demanda = new Demanda();
-            demanda.setId(dto.getIdDemanda());
-            entidade.setDemanda(demanda);
-        }
-
-        return entidade;
     }
 }
