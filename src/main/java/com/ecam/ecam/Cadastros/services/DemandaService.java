@@ -5,8 +5,10 @@ import com.ecam.ecam.Cadastros.model.Comunidade;
 import com.ecam.ecam.Cadastros.model.Demanda;
 import com.ecam.ecam.Cadastros.model.Pessoa;
 import com.ecam.ecam.login.model.Usuario;
+
+import lombok.RequiredArgsConstructor;
+
 import com.ecam.ecam.Cadastros.repository.DemandaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +17,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class DemandaService {
 
-    @Autowired
-    private DemandaRepository repository;
+
+    private final DemandaRepository repository;
 
     public List<DemandaDTO> listarTodas() {
         return repository.findAll().stream()
@@ -58,35 +61,33 @@ public class DemandaService {
                 .orElseThrow(() -> new RuntimeException("Demanda não encontrada!"));
 
         // Atualização dos campos de dados
-        entidadeExistente.setNumeroSequencial(dto.getNumeroSequencial());
-        entidadeExistente.setAno(dto.getAno());
-        entidadeExistente.setTipoDemanda(dto.getTipoDemanda());
-        entidadeExistente.setDescricaoDemanda(dto.getDescricaoDemanda());
-        entidadeExistente.setOrgaoResponsavel(dto.getOrgaoResponsavel());
-        entidadeExistente.setStatus(dto.getStatus());
-        entidadeExistente.setDataSolicitacao(dto.getDataSolicitacao());
+        entidadeExistente.setNumeroSequencial(dto.numeroSequencial());
+        entidadeExistente.setAno(dto.ano());
+        entidadeExistente.setOrgaoResponsavel(dto.orgaoResponsavel());
+        entidadeExistente.setStatus(dto.status());
+        entidadeExistente.setDataSolicitacao(dto.dataSolicitacao());
 
         // Atualização dos relacionamentos
-        if (dto.getIdSolicitante() != null) {
+        if (dto.idSolicitante() != null) {
             Pessoa solicitante = new Pessoa();
-            solicitante.setId(dto.getIdSolicitante());
+            solicitante.setId(dto.idSolicitante());
             entidadeExistente.setSolicitante(solicitante);
         }
-        if (dto.getIdComunidade() != null) {
+        if (dto.idComunidade() != null) {
             Comunidade comunidade = new Comunidade();
-            comunidade.setId(dto.getIdComunidade());
+            comunidade.setId(dto.idComunidade());
             entidadeExistente.setComunidade(comunidade);
         }
-        if (dto.getIdLiderResponsavel() != null) {
+        if (dto.idLiderResponsavel() != null) {
             Pessoa lider = new Pessoa();
-            lider.setId(dto.getIdLiderResponsavel());
+            lider.setId(dto.idLiderResponsavel());
             entidadeExistente.setLiderResponsavel(lider);
         } else {
             entidadeExistente.setLiderResponsavel(null);
         }
-        if (dto.getIdOperador() != null) {
+        if (dto.idOperador() != null) {
             Usuario operador = new Usuario();
-            operador.setId(dto.getIdOperador());
+            operador.setId(dto.idOperador());
             entidadeExistente.setOperador(operador);
         }
 
@@ -107,8 +108,6 @@ public class DemandaService {
                 .idSolicitante(entidade.getSolicitante() != null ? entidade.getSolicitante().getId() : null)
                 .idComunidade(entidade.getComunidade() != null ? entidade.getComunidade().getId() : null)
                 .idLiderResponsavel(entidade.getLiderResponsavel() != null ? entidade.getLiderResponsavel().getId() : null)
-                .tipoDemanda(entidade.getTipoDemanda()) // Mapeamento incluído
-                .descricaoDemanda(entidade.getDescricaoDemanda()) // Mapeamento incluído
                 .orgaoResponsavel(entidade.getOrgaoResponsavel())
                 .status(entidade.getStatus())
                 .dataSolicitacao(entidade.getDataSolicitacao())
@@ -118,34 +117,32 @@ public class DemandaService {
 
     private Demanda converterParaEntidade(DemandaDTO dto) {
         Demanda entidade = Demanda.builder()
-                .id(dto.getId())
-                .numeroSequencial(dto.getNumeroSequencial())
-                .ano(dto.getAno())
-                .tipoDemanda(dto.getTipoDemanda()) // Mapeamento incluído
-                .descricaoDemanda(dto.getDescricaoDemanda()) // Mapeamento incluído
-                .orgaoResponsavel(dto.getOrgaoResponsavel())
-                .status(dto.getStatus())
-                .dataSolicitacao(dto.getDataSolicitacao())
+                .id(dto.id())
+                .numeroSequencial(dto.numeroSequencial())
+                .ano(dto.ano())
+                .orgaoResponsavel(dto.orgaoResponsavel())
+                .status(dto.status())
+                .dataSolicitacao(dto.dataSolicitacao())
                 .build();
 
-        if (dto.getIdSolicitante() != null) {
+        if (dto.idSolicitante() != null) {
             Pessoa solicitante = new Pessoa();
-            solicitante.setId(dto.getIdSolicitante());
+            solicitante.setId(dto.idSolicitante());
             entidade.setSolicitante(solicitante);
         }
-        if (dto.getIdComunidade() != null) {
+        if (dto.idComunidade() != null) {
             Comunidade comunidade = new Comunidade();
-            comunidade.setId(dto.getIdComunidade());
+            comunidade.setId(dto.idComunidade());
             entidade.setComunidade(comunidade);
         }
-        if (dto.getIdLiderResponsavel() != null) {
+        if (dto.idLiderResponsavel() != null) {
             Pessoa lider = new Pessoa();
-            lider.setId(dto.getIdLiderResponsavel());
+            lider.setId(dto.idLiderResponsavel());
             entidade.setLiderResponsavel(lider);
         }
-        if (dto.getIdOperador() != null) {
+        if (dto.idOperador() != null) {
             Usuario operador = new Usuario();
-            operador.setId(dto.getIdOperador());
+            operador.setId(dto.idOperador());
             entidade.setOperador(operador);
         }
 

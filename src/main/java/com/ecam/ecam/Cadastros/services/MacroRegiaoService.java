@@ -4,17 +4,20 @@ import com.ecam.ecam.Cadastros.dto.MacroRegiaoDTO;
 import com.ecam.ecam.Cadastros.model.MacroRegiao;
 import com.ecam.ecam.Cadastros.model.Municipio;
 import com.ecam.ecam.Cadastros.repository.MacroRegiaoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MacroRegiaoService {
 
-    @Autowired
-    private MacroRegiaoRepository repository;
+
+    private final MacroRegiaoRepository repository;
 
     public List<MacroRegiaoDTO> listarTodas() {
         return repository.findAll().stream()
@@ -38,12 +41,12 @@ public class MacroRegiaoService {
         MacroRegiao entidadeExistente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Macro Região não encontrada!"));
 
-        entidadeExistente.setNome(dto.getNome());
-        entidadeExistente.setRegiao_apelido(dto.getRegiaoApelido());
+        entidadeExistente.setNome(dto.nome());
+        entidadeExistente.setRegiao_apelido(dto.regiaoApelido());
         
-        if (dto.getIdMunicipio() != null) {
+        if (dto.idMunicipio() != null) {
             Municipio municipio = new Municipio();
-            municipio.setId(dto.getIdMunicipio());
+            municipio.setId(dto.idMunicipio());
             entidadeExistente.setMunicipio(municipio);
         }
 
@@ -66,14 +69,14 @@ public class MacroRegiaoService {
 
     private MacroRegiao converterParaEntidade(MacroRegiaoDTO dto) {
         MacroRegiao entidade = MacroRegiao.builder()
-                .id(dto.getId())
-                .nome(dto.getNome())
-                .regiao_apelido(dto.getRegiaoApelido())
+                .id(dto.id())
+                .nome(dto.nome())
+                .regiao_apelido(dto.regiaoApelido())
                 .build();
 
-        if (dto.getIdMunicipio() != null) {
+        if (dto.idMunicipio() != null) {
             Municipio municipio = new Municipio();
-            municipio.setId(dto.getIdMunicipio());
+            municipio.setId(dto.idMunicipio());
             entidade.setMunicipio(municipio);
         }
         

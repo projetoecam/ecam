@@ -2,7 +2,8 @@ package com.ecam.ecam.Cadastros.controller;
 
 import com.ecam.ecam.Cadastros.dto.MacroRegiaoDTO;
 import com.ecam.ecam.Cadastros.services.MacroRegiaoService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +12,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/macro-regioes")
+@RequiredArgsConstructor
 public class MacroRegiaoController {
 
-    @Autowired
-    private MacroRegiaoService service;
+    private final MacroRegiaoService service;
 
     @GetMapping
     public ResponseEntity<List<MacroRegiaoDTO>> listarTodas() {

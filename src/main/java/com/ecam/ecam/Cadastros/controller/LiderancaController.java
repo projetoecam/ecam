@@ -2,7 +2,10 @@ package com.ecam.ecam.Cadastros.controller;
 
 import com.ecam.ecam.Cadastros.dto.LiderancaDTO;
 import com.ecam.ecam.Cadastros.services.LiderancaService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +14,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/liderancas")
+@RequiredArgsConstructor
 public class LiderancaController {
 
-    @Autowired
-    private LiderancaService service;
+
+    private final LiderancaService service;
 
     @GetMapping
     public ResponseEntity<List<LiderancaDTO>> listarTodas() {

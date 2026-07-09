@@ -1,23 +1,21 @@
 package com.ecam.ecam.Cadastros.dto;
 
-import lombok.*;
+import lombok.Builder;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class ComunidadeDTO {
 
-    private Integer id;
-    private String nome;
-    private Integer idBairro;
-    private Integer idMacroRegiao;
-    private String cep;
-    private String enderecoPrincipal;
-    private String pontoReferencia;
-    private Integer qtdAproximadaMoradores;
-    private String grauPrioridade;
-    private String classificacao;
+public record ComunidadeDTO(
 
+        Integer id,
+        String nome,
+        Integer idBairro,
+        Integer idMacroRegiao,
+        String cep,
+        String enderecoPrincipal,
+        String pontoReferencia,
+        Integer qtdAproximadaMoradores,
+        String grauPrioridade,
+        String classificacao
+
+) {
 }

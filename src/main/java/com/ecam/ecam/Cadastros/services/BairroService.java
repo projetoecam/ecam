@@ -4,17 +4,20 @@ import com.ecam.ecam.Cadastros.dto.BairroDTO;
 import com.ecam.ecam.Cadastros.model.Bairro;
 import com.ecam.ecam.Cadastros.model.MacroRegiao;
 import com.ecam.ecam.Cadastros.repository.BairroRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class BairroService {
 
-    @Autowired
-    private BairroRepository repository;
+    private final BairroRepository repository;
 
     public List<BairroDTO> listarTodos() {
         return repository.findAll().stream()
@@ -38,12 +41,12 @@ public class BairroService {
         Bairro entidadeExistente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Bairro não encontrado!"));
 
-        entidadeExistente.setNome(dto.getNome());
+        entidadeExistente.setNome(dto.nome());
         
         // Atualiza a referência da Macro Região, se o ID for fornecido
-        if (dto.getIdMacroRegiao() != null) {
+        if (dto.idMacroRegiao() != null) {
             MacroRegiao macroRegiao = new MacroRegiao();
-            macroRegiao.setId(dto.getIdMacroRegiao());
+            macroRegiao.setId(dto.idMacroRegiao());
             entidadeExistente.setMacroRegiao(macroRegiao);
         }
 
@@ -67,14 +70,14 @@ public class BairroService {
 
     private Bairro converterParaEntidade(BairroDTO dto) {
         Bairro entidade = Bairro.builder()
-                .id(dto.getId())
-                .nome(dto.getNome())
+                .id(dto.id())
+                .nome(dto.nome())
                 .build();
 
         // Cria a referência para salvar o relacionamento sem carregar tudo do banco
-        if (dto.getIdMacroRegiao() != null) {
+        if (dto.idMacroRegiao() != null) {
             MacroRegiao macroRegiao = new MacroRegiao();
-            macroRegiao.setId(dto.getIdMacroRegiao());
+            macroRegiao.setId(dto.idMacroRegiao());
             entidade.setMacroRegiao(macroRegiao);
         }
         

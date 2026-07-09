@@ -4,17 +4,20 @@ import com.ecam.ecam.Cadastros.dto.LiderancaDTO;
 import com.ecam.ecam.Cadastros.model.Lideranca;
 import com.ecam.ecam.Cadastros.model.Pessoa;
 import com.ecam.ecam.Cadastros.repository.LiderancaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class LiderancaService {
 
-    @Autowired
-    private LiderancaRepository repository;
+
+    private final LiderancaRepository repository;
 
     public List<LiderancaDTO> listarTodas() {
         return repository.findAll().stream()
@@ -29,7 +32,7 @@ public class LiderancaService {
     }
 
     public LiderancaDTO salvar(LiderancaDTO dto) {
-        if (dto.getIdPessoa() == null) {
+        if (dto.idPessoa() == null) {
             throw new RuntimeException("O ID da Pessoa é obrigatório para cadastrar uma Liderança!");
         }
         
@@ -42,10 +45,10 @@ public class LiderancaService {
         Lideranca entidadeExistente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Liderança não encontrada!"));
 
-        entidadeExistente.setTipoLideranca(dto.getTipoLideranca());
-        entidadeExistente.setClassificacao(dto.getClassificacao());
-        entidadeExistente.setQtdPessoasMobiliza(dto.getQtdPessoasMobiliza());
-        entidadeExistente.setHistoricoPolitico(dto.getHistoricoPolitico());
+        entidadeExistente.setTipoLideranca(dto.tipoLideranca());
+        entidadeExistente.setClassificacao(dto.classificacao());
+        entidadeExistente.setQtdPessoasMobiliza(dto.qtdPessoasMobiliza());
+        entidadeExistente.setHistoricoPolitico(dto.historicoPolitico());
 
         return converterParaDTO(repository.save(entidadeExistente));
     }
@@ -68,15 +71,15 @@ public class LiderancaService {
 
     private Lideranca converterParaEntidade(LiderancaDTO dto) {
         Lideranca entidade = Lideranca.builder()
-                .tipoLideranca(dto.getTipoLideranca())
-                .classificacao(dto.getClassificacao())
-                .qtdPessoasMobiliza(dto.getQtdPessoasMobiliza())
-                .historicoPolitico(dto.getHistoricoPolitico())
+                .tipoLideranca(dto.tipoLideranca())
+                .classificacao(dto.classificacao())
+                .qtdPessoasMobiliza(dto.qtdPessoasMobiliza())
+                .historicoPolitico(dto.historicoPolitico())
                 .build();
 
-        if (dto.getIdPessoa() != null) {
+        if (dto.idPessoa() != null) {
             Pessoa pessoa = new Pessoa();
-            pessoa.setId(dto.getIdPessoa());
+            pessoa.setId(dto.idPessoa());
             entidade.setPessoa(pessoa);
             // Com o @MapsId, definir a pessoa é suficiente para mapear a chave primária
         }

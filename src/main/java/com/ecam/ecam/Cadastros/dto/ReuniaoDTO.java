@@ -1,23 +1,20 @@
 package com.ecam.ecam.Cadastros.dto;
 
-import lombok.*;
+import lombok.Builder;
 import java.time.LocalDate;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Builder
-public class ReuniaoDTO {
+public record ReuniaoDTO ( 
 
-    private Integer id;
-    private LocalDate dataReuniao;
-    private Integer idComunidade;
-    private String temaReuniao;
-    private String descricao;
-    private Integer idLiderResponsavel;
-    private Boolean deputadoPresente;
-    private Boolean representantePresente;
-    private String nomeRepresentante;
+     Integer id,
+     LocalDate dataReuniao,
+     Integer idComunidade,
+     String temaReuniao,
+     String descricao,
+     Integer idLiderResponsavel,
+     Boolean deputadoPresente,
+     Boolean representantePresente,
+     String nomeRepresentante
 
-}
+){}

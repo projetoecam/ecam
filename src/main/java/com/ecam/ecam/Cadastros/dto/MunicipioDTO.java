@@ -1,16 +1,10 @@
 package com.ecam.ecam.Cadastros.dto;
 
-import lombok.*;
+import lombok.Builder;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class MunicipioDTO {
-
-    private Integer id;
-    private String nome;
-    private String uf;
-
-}
+public record MunicipioDTO(
+    Integer id,
+    String nome,
+    String uf
+) {}

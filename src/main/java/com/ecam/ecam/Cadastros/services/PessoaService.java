@@ -5,9 +5,10 @@ import com.ecam.ecam.Cadastros.model.Comunidade;
 import com.ecam.ecam.Cadastros.model.Pessoa;
 import com.ecam.ecam.login.model.Usuario;
 import com.ecam.ecam.Cadastros.repository.PessoaRepository;
-import com.ecam.ecam.Cadastros.repository.ComunidadeRepository;
-import com.ecam.ecam.login.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,16 +17,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PessoaService {
 
-    @Autowired
-    private PessoaRepository repository;
+    
+    private final PessoaRepository repository;
 
-    @Autowired
-    private ComunidadeRepository comunidadeRepository;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
 
     public List<PessoaDTO> listarTodas() {
         return repository.findAll().stream()
@@ -61,44 +58,44 @@ public class PessoaService {
         Pessoa entidadeExistente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada!"));
 
-        entidadeExistente.setNomeCompleto(dto.getNomeCompleto());
-        entidadeExistente.setCpf(dto.getCpf());
-        entidadeExistente.setTituloEleitor(dto.getTituloEleitor());
-        entidadeExistente.setNomeMae(dto.getNomeMae());
-        entidadeExistente.setDataNascimento(dto.getDataNascimento());
-        entidadeExistente.setTelefone(dto.getTelefone());
-        entidadeExistente.setWhatsapp(dto.getWhatsapp());
-        entidadeExistente.setEnderecoCompleto(dto.getEnderecoCompleto());
-        entidadeExistente.setCep(dto.getCep());
-        entidadeExistente.setOrigemCadastro(dto.getOrigemCadastro());
-        entidadeExistente.setStatus(dto.getStatus());
-        entidadeExistente.setObservacoes(dto.getObservacoes());
+        entidadeExistente.setNomeCompleto(dto.nomeCompleto());
+        entidadeExistente.setCpf(dto.cpf());
+        entidadeExistente.setTituloEleitor(dto.tituloEleitor());
+        entidadeExistente.setNomeMae(dto.nomeMae());
+        entidadeExistente.setDataNascimento(dto.dataNascimento());
+        entidadeExistente.setTelefone(dto.telefone());
+        entidadeExistente.setWhatsapp(dto.whatsapp());
+        entidadeExistente.setEnderecoCompleto(dto.enderecoCompleto());
+        entidadeExistente.setCep(dto.cep());
+        entidadeExistente.setOrigemCadastro(dto.origemCadastro());
+        entidadeExistente.setStatus(dto.status());
+        entidadeExistente.setObservacoes(dto.observacoes());
 
-        if (dto.getIdComunidade() != null) {
+        if (dto.idComunidade() != null) {
             Comunidade comunidade = new Comunidade();
-            comunidade.setId(dto.getIdComunidade());
+            comunidade.setId(dto.idComunidade());
             entidadeExistente.setComunidade(comunidade);
         }
 
-        if (dto.getIdLiderResponsavel() != null) {
+        if (dto.idLiderResponsavel() != null) {
             Pessoa lider = new Pessoa();
-            lider.setId(dto.getIdLiderResponsavel());
+            lider.setId(dto.idLiderResponsavel());
             entidadeExistente.setLiderResponsavel(lider);
         } else {
             entidadeExistente.setLiderResponsavel(null);
         }
 
-        if (dto.getIdLiderRegional() != null) {
+        if (dto.idLiderRegional() != null) {
             Pessoa liderRegional = new Pessoa();
-            liderRegional.setId(dto.getIdLiderRegional());
+            liderRegional.setId(dto.idLiderRegional());
             entidadeExistente.setLiderRegional(liderRegional);
         } else {
             entidadeExistente.setLiderRegional(null);
         }
 
-        if (dto.getIdUsuarioCadastro() != null) {
+        if (dto.idUsuarioCadastro() != null) {
             Usuario usuario = new Usuario();
-            usuario.setId(dto.getIdUsuarioCadastro());
+            usuario.setId(dto.idUsuarioCadastro());
             entidadeExistente.setUsuarioCadastro(usuario);
         }
 
@@ -135,43 +132,43 @@ public class PessoaService {
 
     private Pessoa converterParaEntidade(PessoaDTO dto) {
         Pessoa entidade = Pessoa.builder()
-                .id(dto.getId())
-                .nomeCompleto(dto.getNomeCompleto())
-                .cpf(dto.getCpf())
-                .tituloEleitor(dto.getTituloEleitor())
-                .nomeMae(dto.getNomeMae())
-                .dataNascimento(dto.getDataNascimento())
-                .telefone(dto.getTelefone())
-                .whatsapp(dto.getWhatsapp())
-                .enderecoCompleto(dto.getEnderecoCompleto())
-                .cep(dto.getCep())
-                .origemCadastro(dto.getOrigemCadastro())
-                .status(dto.getStatus())
-                .observacoes(dto.getObservacoes())
-                .dataCadastro(dto.getDataCadastro())
+                .id(dto.id())
+                .nomeCompleto(dto.nomeCompleto())
+                .cpf(dto.cpf())
+                .tituloEleitor(dto.tituloEleitor())
+                .nomeMae(dto.nomeMae())
+                .dataNascimento(dto.dataNascimento())
+                .telefone(dto.telefone())
+                .whatsapp(dto.whatsapp())
+                .enderecoCompleto(dto.enderecoCompleto())
+                .cep(dto.cep())
+                .origemCadastro(dto.origemCadastro())
+                .status(dto.status())
+                .observacoes(dto.observacoes())
+                .dataCadastro(dto.dataCadastro())
                 .build();
 
-        if (dto.getIdComunidade() != null) {
+        if (dto.idComunidade() != null) {
             Comunidade comunidade = new Comunidade();
-            comunidade.setId(dto.getIdComunidade());
+            comunidade.setId(dto.idComunidade());
             entidade.setComunidade(comunidade);
         }
 
-        if (dto.getIdLiderResponsavel() != null) {
+        if (dto.idLiderResponsavel() != null) {
             Pessoa lider = new Pessoa();
-            lider.setId(dto.getIdLiderResponsavel());
+            lider.setId(dto.idLiderResponsavel());
             entidade.setLiderResponsavel(lider);
         }
 
-        if (dto.getIdLiderRegional() != null) {
+        if (dto.idLiderRegional() != null) {
             Pessoa liderRegional = new Pessoa();
-            liderRegional.setId(dto.getIdLiderRegional());
+            liderRegional.setId(dto.idLiderRegional());
             entidade.setLiderRegional(liderRegional);
         }
 
-        if (dto.getIdUsuarioCadastro() != null) {
+        if (dto.idUsuarioCadastro() != null) {
             Usuario usuario = new Usuario();
-            usuario.setId(dto.getIdUsuarioCadastro());
+            usuario.setId(dto.idUsuarioCadastro());
             entidade.setUsuarioCadastro(usuario);
         }
 

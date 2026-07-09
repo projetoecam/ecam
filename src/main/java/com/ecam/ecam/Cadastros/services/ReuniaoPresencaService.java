@@ -6,17 +6,20 @@ import com.ecam.ecam.Cadastros.model.Reuniao;
 import com.ecam.ecam.Cadastros.model.ReuniaoPresenca;
 import com.ecam.ecam.Cadastros.model.ReuniaoPresencaId;
 import com.ecam.ecam.Cadastros.repository.ReuniaoPresencaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ReuniaoPresencaService {
 
-    @Autowired
-    private ReuniaoPresencaRepository repository;
+    
+    private final ReuniaoPresencaRepository repository;
 
     public List<ReuniaoPresencaDTO> listarTodas() {
         return repository.findAll().stream()
@@ -68,19 +71,19 @@ public class ReuniaoPresencaService {
     }
 
     private ReuniaoPresenca converterParaEntidade(ReuniaoPresencaDTO dto) {
-        ReuniaoPresencaId idComposto = new ReuniaoPresencaId(dto.getIdReuniao(), dto.getIdPessoa());
+        ReuniaoPresencaId idComposto = new ReuniaoPresencaId(dto.idReuniao(), dto.idPessoa());
         
         Reuniao reuniao = new Reuniao();
-        reuniao.setId(dto.getIdReuniao());
+        reuniao.setId(dto.idReuniao());
 
         Pessoa pessoa = new Pessoa();
-        pessoa.setId(dto.getIdPessoa());
+        pessoa.setId(dto.idPessoa());
 
         return ReuniaoPresenca.builder()
                 .id(idComposto)
                 .reuniao(reuniao)
                 .pessoa(pessoa)
-                .assinaturaConfirmada(dto.getAssinaturaConfirmada())
+                .assinaturaConfirmada(dto.assinaturaConfirmada())
                 .build();
     }
 }

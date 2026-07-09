@@ -2,7 +2,9 @@ package com.ecam.ecam.Cadastros.controller;
 
 import com.ecam.ecam.Cadastros.dto.AtendimentoDTO;
 import com.ecam.ecam.Cadastros.services.AtendimentoService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +13,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/atendimentos")
+@RequiredArgsConstructor
 public class AtendimentoController {
 
-    @Autowired
-    private AtendimentoService service;
+
+    private final AtendimentoService service;
 
     @GetMapping
     public ResponseEntity<List<AtendimentoDTO>> listarTodos() {

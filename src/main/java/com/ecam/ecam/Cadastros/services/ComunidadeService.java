@@ -5,17 +5,19 @@ import com.ecam.ecam.Cadastros.model.Bairro;
 import com.ecam.ecam.Cadastros.model.Comunidade;
 import com.ecam.ecam.Cadastros.model.MacroRegiao;
 import com.ecam.ecam.Cadastros.repository.ComunidadeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ComunidadeService {
 
-    @Autowired
-    private ComunidadeRepository repository;
+    
+    private final ComunidadeRepository repository;
 
     public List<ComunidadeDTO> listarTodas() {
         return repository.findAll().stream()
@@ -39,23 +41,23 @@ public class ComunidadeService {
         Comunidade entidadeExistente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Comunidade não encontrada!"));
 
-        entidadeExistente.setNome(dto.getNome());
-        entidadeExistente.setCep(dto.getCep());
-        entidadeExistente.setEnderecoPrincipal(dto.getEnderecoPrincipal());
-        entidadeExistente.setPontoReferencia(dto.getPontoReferencia());
-        entidadeExistente.setQtdAproximadaMoradores(dto.getQtdAproximadaMoradores());
-        entidadeExistente.setGrauPrioridade(dto.getGrauPrioridade());
-        entidadeExistente.setClassificacao(dto.getClassificacao());
+        entidadeExistente.setNome(dto.nome());
+        entidadeExistente.setCep(dto.cep());
+        entidadeExistente.setEnderecoPrincipal(dto.enderecoPrincipal());
+        entidadeExistente.setPontoReferencia(dto.pontoReferencia());
+        entidadeExistente.setQtdAproximadaMoradores(dto.qtdAproximadaMoradores());
+        entidadeExistente.setGrauPrioridade(dto.grauPrioridade());
+        entidadeExistente.setClassificacao(dto.classificacao());
 
-        if (dto.getIdBairro() != null) {
+        if (dto.idBairro() != null) {
             Bairro bairro = new Bairro();
-            bairro.setId(dto.getIdBairro());
+            bairro.setId(dto.idBairro());
             entidadeExistente.setBairro(bairro);
         }
 
-        if (dto.getIdMacroRegiao() != null) {
+        if (dto.idMacroRegiao() != null) {
             MacroRegiao macroRegiao = new MacroRegiao();
-            macroRegiao.setId(dto.getIdMacroRegiao());
+            macroRegiao.setId(dto.idMacroRegiao());
             entidadeExistente.setMacroRegiao(macroRegiao);
         } else {
             entidadeExistente.setMacroRegiao(null);
@@ -87,25 +89,25 @@ public class ComunidadeService {
 
     private Comunidade converterParaEntidade(ComunidadeDTO dto) {
         Comunidade entidade = Comunidade.builder()
-                .id(dto.getId())
-                .nome(dto.getNome())
-                .cep(dto.getCep())
-                .enderecoPrincipal(dto.getEnderecoPrincipal())
-                .pontoReferencia(dto.getPontoReferencia())
-                .qtdAproximadaMoradores(dto.getQtdAproximadaMoradores())
-                .grauPrioridade(dto.getGrauPrioridade())
-                .classificacao(dto.getClassificacao())
+                .id(dto.id())
+                .nome(dto.nome())
+                .cep(dto.cep())
+                .enderecoPrincipal(dto.enderecoPrincipal())
+                .pontoReferencia(dto.pontoReferencia())
+                .qtdAproximadaMoradores(dto.qtdAproximadaMoradores())
+                .grauPrioridade(dto.grauPrioridade())
+                .classificacao(dto.classificacao())
                 .build();
 
-        if (dto.getIdBairro() != null) {
+        if (dto.idBairro() != null) {
             Bairro bairro = new Bairro();
-            bairro.setId(dto.getIdBairro());
+            bairro.setId(dto.idBairro());
             entidade.setBairro(bairro);
         }
 
-        if (dto.getIdMacroRegiao() != null) {
+        if (dto.idMacroRegiao() != null) {
             MacroRegiao macroRegiao = new MacroRegiao();
-            macroRegiao.setId(dto.getIdMacroRegiao());
+            macroRegiao.setId(dto.idMacroRegiao());
             entidade.setMacroRegiao(macroRegiao);
         }
 
