@@ -6,17 +6,19 @@ import com.ecam.ecam.Cadastros.model.PessoaSegmento;
 import com.ecam.ecam.Cadastros.model.PessoaSegmentoId;
 import com.ecam.ecam.Cadastros.model.Segmento;
 import com.ecam.ecam.Cadastros.repository.PessoaSegmentoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PessoaSegmentoService {
 
-    @Autowired
-    private PessoaSegmentoRepository repository;
+    private final PessoaSegmentoRepository repository;
 
     public List<PessoaSegmentoDTO> listarTodos() {
         return repository.findAll().stream()
@@ -51,13 +53,13 @@ public class PessoaSegmentoService {
     }
 
     private PessoaSegmento converterParaEntidade(PessoaSegmentoDTO dto) {
-        PessoaSegmentoId idComposto = new PessoaSegmentoId(dto.getIdPessoa(), dto.getIdSegmento());
+        PessoaSegmentoId idComposto = new PessoaSegmentoId(dto.idPessoa(), dto.idSegmento());
         
         Pessoa pessoa = new Pessoa();
-        pessoa.setId(dto.getIdPessoa());
+        pessoa.setId(dto.idPessoa());
 
         Segmento segmento = new Segmento();
-        segmento.setId(dto.getIdSegmento());
+        segmento.setId(dto.idSegmento());
 
         return PessoaSegmento.builder()
                 .id(idComposto)

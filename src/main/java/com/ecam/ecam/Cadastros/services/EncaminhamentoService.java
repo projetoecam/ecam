@@ -4,18 +4,21 @@ import com.ecam.ecam.Cadastros.dto.EncaminhamentoDTO;
 import com.ecam.ecam.Cadastros.model.Demanda;
 import com.ecam.ecam.Cadastros.model.Encaminhamento;
 import com.ecam.ecam.login.model.Usuario;
+
+import lombok.RequiredArgsConstructor;
+
 import com.ecam.ecam.Cadastros.repository.EncaminhamentoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class EncaminhamentoService {
 
-    @Autowired
-    private EncaminhamentoRepository repository;
+
+    private final EncaminhamentoRepository repository;
 
     public List<EncaminhamentoDTO> listarTodos() {
         return repository.findAll().stream()
@@ -45,21 +48,21 @@ public class EncaminhamentoService {
         Encaminhamento entidadeExistente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Encaminhamento não encontrado!"));
 
-        entidadeExistente.setNumeroProtocolo(dto.getNumeroProtocolo());
-        entidadeExistente.setOrgaoDestinatario(dto.getOrgaoDestinatario());
-        entidadeExistente.setDataEnvio(dto.getDataEnvio());
-        entidadeExistente.setAnexosUrl(dto.getAnexosUrl());
-        entidadeExistente.setRespostaRecebida(dto.getRespostaRecebida());
+        entidadeExistente.setNumeroProtocolo(dto.numeroProtocolo());
+        entidadeExistente.setOrgaoDestinatario(dto.orgaoDestinatario());
+        entidadeExistente.setDataEnvio(dto.dataEnvio());
+        entidadeExistente.setAnexosUrl(dto.anexosUrl());
+        entidadeExistente.setRespostaRecebida(dto.respostaRecebida());
 
-        if (dto.getIdDemanda() != null) {
+        if (dto.idDemanda() != null) {
             Demanda demanda = new Demanda();
-            demanda.setId(dto.getIdDemanda());
+            demanda.setId(dto.idDemanda());
             entidadeExistente.setDemanda(demanda);
         }
 
-        if (dto.getIdOperador() != null) {
+        if (dto.idOperador() != null) {
             Usuario operador = new Usuario();
-            operador.setId(dto.getIdOperador());
+            operador.setId(dto.idOperador());
             entidadeExistente.setOperador(operador);
         }
 
@@ -87,23 +90,23 @@ public class EncaminhamentoService {
 
     private Encaminhamento converterParaEntidade(EncaminhamentoDTO dto) {
         Encaminhamento entidade = Encaminhamento.builder()
-                .id(dto.getId())
-                .numeroProtocolo(dto.getNumeroProtocolo())
-                .orgaoDestinatario(dto.getOrgaoDestinatario())
-                .dataEnvio(dto.getDataEnvio())
-                .anexosUrl(dto.getAnexosUrl())
-                .respostaRecebida(dto.getRespostaRecebida())
+                .id(dto.id())
+                .numeroProtocolo(dto.numeroProtocolo())
+                .orgaoDestinatario(dto.orgaoDestinatario())
+                .dataEnvio(dto.dataEnvio())
+                .anexosUrl(dto.anexosUrl())
+                .respostaRecebida(dto.respostaRecebida())
                 .build();
 
-        if (dto.getIdDemanda() != null) {
+        if (dto.idDemanda() != null) {
             Demanda demanda = new Demanda();
-            demanda.setId(dto.getIdDemanda());
+            demanda.setId(dto.idDemanda());
             entidade.setDemanda(demanda);
         }
 
-        if (dto.getIdOperador() != null) {
+        if (dto.idOperador() != null) {
             Usuario operador = new Usuario();
-            operador.setId(dto.getIdOperador());
+            operador.setId(dto.idOperador());
             entidade.setOperador(operador);
         }
 

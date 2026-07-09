@@ -2,7 +2,9 @@ package com.ecam.ecam.Cadastros.controller;
 
 import com.ecam.ecam.Cadastros.dto.ComunidadeDTO;
 import com.ecam.ecam.Cadastros.services.ComunidadeService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +13,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/comunidades")
+@RequiredArgsConstructor
 public class ComunidadeController {
 
-    @Autowired
-    private ComunidadeService service;
+    
+    private final ComunidadeService service;
 
     @GetMapping
     public ResponseEntity<List<ComunidadeDTO>> listarTodas() {

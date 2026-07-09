@@ -2,7 +2,9 @@ package com.ecam.ecam.Cadastros.controller;
 
 import com.ecam.ecam.Cadastros.dto.PessoaDTO;
 import com.ecam.ecam.Cadastros.services.PessoaService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,10 +15,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/pessoas")
 @PreAuthorize("hasRole('ADMIN')")
+@RequiredArgsConstructor
 public class PessoaController {
 
-    @Autowired
-    private PessoaService service;
+    private final PessoaService service;
 
     @GetMapping
     public ResponseEntity<List<PessoaDTO>> listarTodas() {

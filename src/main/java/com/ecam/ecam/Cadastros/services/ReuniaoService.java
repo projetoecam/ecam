@@ -5,17 +5,20 @@ import com.ecam.ecam.Cadastros.model.Comunidade;
 import com.ecam.ecam.Cadastros.model.Pessoa;
 import com.ecam.ecam.Cadastros.model.Reuniao;
 import com.ecam.ecam.Cadastros.repository.ReuniaoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ReuniaoService {
 
-    @Autowired
-    private ReuniaoRepository repository;
+
+    private final ReuniaoRepository repository;
 
     public List<ReuniaoDTO> listarTodas() {
         return repository.findAll().stream()
@@ -45,22 +48,22 @@ public class ReuniaoService {
         Reuniao entidadeExistente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Reunião não encontrada!"));
 
-        entidadeExistente.setDataReuniao(dto.getDataReuniao());
-        entidadeExistente.setTemaReuniao(dto.getTemaReuniao());
-        entidadeExistente.setDescricao(dto.getDescricao());
-        entidadeExistente.setDeputadoPresente(dto.getDeputadoPresente());
-        entidadeExistente.setRepresentantePresente(dto.getRepresentantePresente());
-        entidadeExistente.setNomeRepresentante(dto.getNomeRepresentante());
+        entidadeExistente.setDataReuniao(dto.dataReuniao());
+        entidadeExistente.setTemaReuniao(dto.temaReuniao());
+        entidadeExistente.setDescricao(dto.descricao());
+        entidadeExistente.setDeputadoPresente(dto.deputadoPresente());
+        entidadeExistente.setRepresentantePresente(dto.representantePresente());
+        entidadeExistente.setNomeRepresentante(dto.nomeRepresentante());
 
-        if (dto.getIdComunidade() != null) {
+        if (dto.idComunidade() != null) {
             Comunidade comunidade = new Comunidade();
-            comunidade.setId(dto.getIdComunidade());
+            comunidade.setId(dto.idComunidade());
             entidadeExistente.setComunidade(comunidade);
         }
 
-        if (dto.getIdLiderResponsavel() != null) {
+        if (dto.idLiderResponsavel() != null) {
             Pessoa lider = new Pessoa();
-            lider.setId(dto.getIdLiderResponsavel());
+            lider.setId(dto.idLiderResponsavel());
             entidadeExistente.setLiderResponsavel(lider);
         }
 
@@ -89,24 +92,24 @@ public class ReuniaoService {
 
     private Reuniao converterParaEntidade(ReuniaoDTO dto) {
         Reuniao entidade = Reuniao.builder()
-                .id(dto.getId())
-                .dataReuniao(dto.getDataReuniao())
-                .temaReuniao(dto.getTemaReuniao())
-                .descricao(dto.getDescricao())
-                .deputadoPresente(dto.getDeputadoPresente())
-                .representantePresente(dto.getRepresentantePresente())
-                .nomeRepresentante(dto.getNomeRepresentante())
+                .id(dto.id())
+                .dataReuniao(dto.dataReuniao())
+                .temaReuniao(dto.temaReuniao())
+                .descricao(dto.descricao())
+                .deputadoPresente(dto.deputadoPresente())
+                .representantePresente(dto.representantePresente())
+                .nomeRepresentante(dto.nomeRepresentante())
                 .build();
 
-        if (dto.getIdComunidade() != null) {
+        if (dto.idComunidade() != null) {
             Comunidade comunidade = new Comunidade();
-            comunidade.setId(dto.getIdComunidade());
+            comunidade.setId(dto.idComunidade());
             entidade.setComunidade(comunidade);
         }
 
-        if (dto.getIdLiderResponsavel() != null) {
+        if (dto.idLiderResponsavel() != null) {
             Pessoa lider = new Pessoa();
-            lider.setId(dto.getIdLiderResponsavel());
+            lider.setId(dto.idLiderResponsavel());
             entidade.setLiderResponsavel(lider);
         }
 

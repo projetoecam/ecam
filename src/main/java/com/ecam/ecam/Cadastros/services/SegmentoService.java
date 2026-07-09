@@ -3,17 +3,20 @@ package com.ecam.ecam.Cadastros.services;
 import com.ecam.ecam.Cadastros.dto.SegmentoDTO;
 import com.ecam.ecam.Cadastros.model.Segmento;
 import com.ecam.ecam.Cadastros.repository.SegmentoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class SegmentoService {
 
-    @Autowired
-    private SegmentoRepository repository;
+
+    private final SegmentoRepository repository;
 
     public List<SegmentoDTO> listarTodos() {
         return repository.findAll().stream()
@@ -37,7 +40,7 @@ public class SegmentoService {
         Segmento entidadeExistente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Segmento não encontrado!"));
 
-        entidadeExistente.setNome(dto.getNome());
+        entidadeExistente.setNome(dto.nome());
 
         return converterParaDTO(repository.save(entidadeExistente));
     }
@@ -57,8 +60,8 @@ public class SegmentoService {
 
     private Segmento converterParaEntidade(SegmentoDTO dto) {
         return Segmento.builder()
-                .id(dto.getId())
-                .nome(dto.getNome())
+                .id(dto.id())
+                .nome(dto.nome())
                 .build();
     }
 }

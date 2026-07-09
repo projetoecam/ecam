@@ -4,7 +4,9 @@ import com.ecam.ecam.Cadastros.dto.DemandaTipoDTO;
 import com.ecam.ecam.Cadastros.model.Demanda;
 import com.ecam.ecam.Cadastros.model.DemandaTipo;
 import com.ecam.ecam.Cadastros.repository.DemandaTipoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,11 +17,11 @@ import java.util.stream.Collectors;
  * Serviço responsável pelas regras de negócio da entidade DemandaTipo.
  */
 @Service
+@RequiredArgsConstructor
 public class DemandaTipoService {
 
-    @Autowired
-    private DemandaTipoRepository repository;
-
+    private final DemandaTipoRepository repository;
+    
     public List<DemandaTipoDTO> listarPorDemanda(Integer idDemanda) {
         return repository.findByDemandaId(idDemanda).stream()
                 .map(this::converterParaDTO)
@@ -37,20 +39,20 @@ public class DemandaTipoService {
         DemandaTipo entidadeExistente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tipo de Demanda não encontrado!"));
         
-        entidadeExistente.setTipoSaude(dto.getTipoSaude());
-        entidadeExistente.setDescricaoTipoSaude(dto.getDescricaoTipoSaude());
+        entidadeExistente.setTipoSaude(dto.tipoSaude());
+        entidadeExistente.setDescricaoTipoSaude(dto.descricaoTipoSaude());
         
-        entidadeExistente.setTipoInfraestrutura(dto.getTipoInfraestrutura());
-        entidadeExistente.setDescricaoTipoInfraestrutura(dto.getDescricaoTipoInfraestrutura());
+        entidadeExistente.setTipoInfraestrutura(dto.tipoInfraestrutura());
+        entidadeExistente.setDescricaoTipoInfraestrutura(dto.descricaoTipoInfraestrutura());
         
-        entidadeExistente.setTipoEducacao(dto.getTipoEducacao());
-        entidadeExistente.setDescricaoTipoEducacao(dto.getDescricaoTipoEducacao());
+        entidadeExistente.setTipoEducacao(dto.tipoEducacao());
+        entidadeExistente.setDescricaoTipoEducacao(dto.descricaoTipoEducacao());
         
-        entidadeExistente.setTipoSeguranca(dto.getTipoSeguranca());
-        entidadeExistente.setDescricaoTipoSeguranca(dto.getDescricaoTipoSeguranca());
+        entidadeExistente.setTipoSeguranca(dto.tipoSeguranca());
+        entidadeExistente.setDescricaoTipoSeguranca(dto.descricaoTipoSeguranca());
         
-        entidadeExistente.setTipoOutros(dto.getTipoOutros());
-        entidadeExistente.setDescricaoTipoOutros(dto.getDescricaoTipoOutros());
+        entidadeExistente.setTipoOutros(dto.tipoOutros());
+        entidadeExistente.setDescricaoTipoOutros(dto.descricaoTipoOutros());
         
         return converterParaDTO(repository.save(entidadeExistente));
     }
@@ -81,21 +83,21 @@ public class DemandaTipoService {
 
     private DemandaTipo converterParaEntidade(DemandaTipoDTO dto) {
         Demanda demanda = new Demanda();
-        demanda.setId(dto.getIdDemanda());
+        demanda.setId(dto.idDemanda());
         
         return DemandaTipo.builder()
-                .id(dto.getId())
+                .id(dto.id())
                 .demanda(demanda)
-                .tipoSaude(dto.getTipoSaude())
-                .descricaoTipoSaude(dto.getDescricaoTipoSaude())
-                .tipoInfraestrutura(dto.getTipoInfraestrutura())
-                .descricaoTipoInfraestrutura(dto.getDescricaoTipoInfraestrutura())
-                .tipoEducacao(dto.getTipoEducacao())
-                .descricaoTipoEducacao(dto.getDescricaoTipoEducacao())
-                .tipoSeguranca(dto.getTipoSeguranca())
-                .descricaoTipoSeguranca(dto.getDescricaoTipoSeguranca())
-                .tipoOutros(dto.getTipoOutros())
-                .descricaoTipoOutros(dto.getDescricaoTipoOutros())
+                .tipoSaude(dto.tipoSaude())
+                .descricaoTipoSaude(dto.descricaoTipoSaude())
+                .tipoInfraestrutura(dto.tipoInfraestrutura())
+                .descricaoTipoInfraestrutura(dto.descricaoTipoInfraestrutura())
+                .tipoEducacao(dto.tipoEducacao())
+                .descricaoTipoEducacao(dto.descricaoTipoEducacao())
+                .tipoSeguranca(dto.tipoSeguranca())
+                .descricaoTipoSeguranca(dto.descricaoTipoSeguranca())
+                .tipoOutros(dto.tipoOutros())
+                .descricaoTipoOutros(dto.descricaoTipoOutros())
                 .build();
     }
 }

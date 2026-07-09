@@ -1,22 +1,19 @@
 package com.ecam.ecam.Cadastros.dto;
 
-import lombok.*;
+import lombok.Builder;
 import java.time.LocalDate;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Builder
-public class EncaminhamentoDTO {
+public record EncaminhamentoDTO(
 
-    private Integer id;
-    private Integer idDemanda;
-    private String numeroProtocolo;
-    private String orgaoDestinatario;
-    private LocalDate dataEnvio;
-    private String anexosUrl;
-    private String respostaRecebida;
-    private Long idOperador;
+     Integer id,
+     Integer idDemanda,
+     String numeroProtocolo,
+     String orgaoDestinatario,
+     LocalDate dataEnvio,
+     String anexosUrl,
+     String respostaRecebida,
+     Long idOperador
 
-}
+){}

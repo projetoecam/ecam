@@ -2,17 +2,19 @@ package com.ecam.ecam.Cadastros.controller;
 
 import com.ecam.ecam.Cadastros.dto.DemandaTipoDTO;
 import com.ecam.ecam.Cadastros.services.DemandaTipoService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/demanda-tipos")
+@RequiredArgsConstructor
 public class DemandaTipoController {
 
-    @Autowired
-    private DemandaTipoService service;
+    private final DemandaTipoService service;
 
     @GetMapping("/demanda/{id}")
     public ResponseEntity<List<DemandaTipoDTO>> listar(@PathVariable Integer id) {

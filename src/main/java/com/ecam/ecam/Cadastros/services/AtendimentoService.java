@@ -4,8 +4,10 @@ import com.ecam.ecam.Cadastros.dto.AtendimentoDTO;
 import com.ecam.ecam.Cadastros.model.Atendimento;
 import com.ecam.ecam.Cadastros.model.Pessoa;
 import com.ecam.ecam.login.model.Usuario;
+
+import lombok.RequiredArgsConstructor;
+
 import com.ecam.ecam.Cadastros.repository.AtendimentoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,10 +15,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class AtendimentoService {
 
-    @Autowired
-    private AtendimentoRepository repository;
+
+    private final AtendimentoRepository repository;
 
     public List<AtendimentoDTO> listarTodos() {
         return repository.findAll().stream()
@@ -52,22 +55,22 @@ public class AtendimentoService {
         Atendimento entidadeExistente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Atendimento não encontrado!"));
 
-        entidadeExistente.setDataHora(dto.getDataHora());
-        entidadeExistente.setMotivoContato(dto.getMotivoContato());
-        entidadeExistente.setResultadoContato(dto.getResultadoContato());
-        entidadeExistente.setNecessitaRetorno(dto.getNecessitaRetorno());
-        entidadeExistente.setDataProximoRetorno(dto.getDataProximoRetorno());
-        entidadeExistente.setObservacoes(dto.getObservacoes());
+        entidadeExistente.setDataHora(dto.dataHora());
+        entidadeExistente.setMotivoContato(dto.motivoContato());
+        entidadeExistente.setResultadoContato(dto.resultadoContato());
+        entidadeExistente.setNecessitaRetorno(dto.necessitaRetorno());
+        entidadeExistente.setDataProximoRetorno(dto.dataProximoRetorno());
+        entidadeExistente.setObservacoes(dto.observacoes());
 
-        if (dto.getIdPessoa() != null) {
+        if (dto.idPessoa() != null) {
             Pessoa pessoa = new Pessoa();
-            pessoa.setId(dto.getIdPessoa());
+            pessoa.setId(dto.idPessoa());
             entidadeExistente.setPessoa(pessoa);
         }
 
-        if (dto.getIdUsuarioCadastro() != null) {
+        if (dto.idUsuarioCadastro() != null) {
             Usuario usuario = new Usuario();
-            usuario.setId(dto.getIdUsuarioCadastro());
+            usuario.setId(dto.idUsuarioCadastro());
             entidadeExistente.setUsuarioCadastro(usuario);
         }
 
@@ -96,24 +99,24 @@ public class AtendimentoService {
 
     private Atendimento converterParaEntidade(AtendimentoDTO dto) {
         Atendimento entidade = Atendimento.builder()
-                .id(dto.getId())
-                .dataHora(dto.getDataHora())
-                .motivoContato(dto.getMotivoContato())
-                .resultadoContato(dto.getResultadoContato())
-                .necessitaRetorno(dto.getNecessitaRetorno())
-                .dataProximoRetorno(dto.getDataProximoRetorno())
-                .observacoes(dto.getObservacoes())
+                .id(dto.id())
+                .dataHora(dto.dataHora())
+                .motivoContato(dto.motivoContato())
+                .resultadoContato(dto.resultadoContato())
+                .necessitaRetorno(dto.necessitaRetorno())
+                .dataProximoRetorno(dto.dataProximoRetorno())
+                .observacoes(dto.observacoes())
                 .build();
 
-        if (dto.getIdPessoa() != null) {
+        if (dto.idPessoa() != null) {
             Pessoa pessoa = new Pessoa();
-            pessoa.setId(dto.getIdPessoa());
+            pessoa.setId(dto.idPessoa());
             entidade.setPessoa(pessoa);
         }
 
-        if (dto.getIdUsuarioCadastro() != null) {
+        if (dto.idUsuarioCadastro() != null) {
             Usuario usuario = new Usuario();
-            usuario.setId(dto.getIdUsuarioCadastro());
+            usuario.setId(dto.idUsuarioCadastro());
             entidade.setUsuarioCadastro(usuario);
         }
 

@@ -2,7 +2,9 @@ package com.ecam.ecam.Cadastros.controller;
 
 import com.ecam.ecam.Cadastros.dto.SegmentoDTO;
 import com.ecam.ecam.Cadastros.services.SegmentoService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +13,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/segmentos")
+@RequiredArgsConstructor
 public class SegmentoController {
 
-    @Autowired
-    private SegmentoService service;
+    
+    private final SegmentoService service;
 
     @GetMapping
     public ResponseEntity<List<SegmentoDTO>> listarTodos() {

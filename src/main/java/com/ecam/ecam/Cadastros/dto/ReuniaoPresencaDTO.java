@@ -1,16 +1,13 @@
 package com.ecam.ecam.Cadastros.dto;
 
-import lombok.*;
+import lombok.Builder;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Builder
-public class ReuniaoPresencaDTO {
+public record ReuniaoPresencaDTO (
 
-    private Integer idReuniao;
-    private Integer idPessoa;
-    private Boolean assinaturaConfirmada;
+     Integer idReuniao,
+     Integer idPessoa,
+     Boolean assinaturaConfirmada
 
-}
+){}

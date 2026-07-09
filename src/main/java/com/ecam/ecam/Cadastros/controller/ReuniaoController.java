@@ -2,7 +2,9 @@ package com.ecam.ecam.Cadastros.controller;
 
 import com.ecam.ecam.Cadastros.dto.ReuniaoDTO;
 import com.ecam.ecam.Cadastros.services.ReuniaoService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +13,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/reunioes")
+@RequiredArgsConstructor
 public class ReuniaoController {
 
-    @Autowired
-    private ReuniaoService service;
+    private final ReuniaoService service;
 
     @GetMapping
     public ResponseEntity<List<ReuniaoDTO>> listarTodas() {
