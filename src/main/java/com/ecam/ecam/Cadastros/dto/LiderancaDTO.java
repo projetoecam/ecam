@@ -1,18 +1,15 @@
 package com.ecam.ecam.Cadastros.dto;
 
-import lombok.*;
+import lombok.Builder;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Builder
-public class LiderancaDTO {
+public record LiderancaDTO(
 
-    private Integer idPessoa;
-    private String tipoLideranca;
-    private String classificacao;
-    private Integer qtdPessoasMobiliza;
-    private String historicoPolitico;
+     Integer idPessoa,
+     String tipoLideranca,
+     String classificacao,
+     Integer qtdPessoasMobiliza,
+     String historicoPolitico
 
-}
+){}

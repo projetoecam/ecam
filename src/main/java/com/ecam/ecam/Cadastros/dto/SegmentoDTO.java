@@ -1,15 +1,11 @@
 package com.ecam.ecam.Cadastros.dto;
 
-import lombok.*;
+import lombok.Builder;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Builder
-public class SegmentoDTO {
-
-    private Integer id;
-    private String nome;
-
-}
+public record SegmentoDTO(
+    
+        Integer id,
+        String nome
+) {}

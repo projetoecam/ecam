@@ -3,17 +3,19 @@ package com.ecam.ecam.Cadastros.services;
 import com.ecam.ecam.Cadastros.dto.MunicipioDTO;
 import com.ecam.ecam.Cadastros.model.Municipio;
 import com.ecam.ecam.Cadastros.repository.MunicipioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MunicipioService {
 
-    @Autowired
-    private MunicipioRepository repository;
+
+    private final MunicipioRepository repository;
 
     public List<MunicipioDTO> listarTodos() {
         return repository.findAll().stream()
@@ -37,8 +39,8 @@ public class MunicipioService {
         Municipio entidadeExistente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Município não encontrado!"));
 
-        entidadeExistente.setNome(dto.getNome());
-        entidadeExistente.setUf(dto.getUf());
+        entidadeExistente.setNome(dto.nome());
+        entidadeExistente.setUf(dto.uf());
 
         return converterParaDTO(repository.save(entidadeExistente));
     }
@@ -59,9 +61,9 @@ public class MunicipioService {
 
     private Municipio converterParaEntidade(MunicipioDTO dto) {
         return Municipio.builder()
-                .id(dto.getId())
-                .nome(dto.getNome())
-                .uf(dto.getUf())
+                .id(dto.id())
+                .nome(dto.nome())
+                .uf(dto.uf())
                 .build();
     }
 }

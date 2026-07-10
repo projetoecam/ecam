@@ -34,7 +34,7 @@ public class Atendimento {
     @Column(name = "motivo_contato", nullable = false, length = 255)
     private String motivoContato;
 
-    @Column(name = "resultado_contato", nullable = false, columnDefinition = "VARCHAR(MAX)")
+    @Column(name = "resultado_contato", nullable = false, columnDefinition = "TEXT")
     private String resultadoContato;
 
     @Column(name = "necessita_retorno")
@@ -43,7 +43,7 @@ public class Atendimento {
     @Column(name = "data_proximo_retorno")
     private LocalDate dataProximoRetorno;
 
-    @Column(columnDefinition = "VARCHAR(MAX)")
+    @Column(columnDefinition = "TEXT")
     private String observacoes;
 
 }

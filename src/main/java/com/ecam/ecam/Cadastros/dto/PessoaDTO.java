@@ -1,33 +1,29 @@
 package com.ecam.ecam.Cadastros.dto;
 
-import lombok.*;
+import lombok.Builder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class PessoaDTO {
+public record PessoaDTO (
 
-    private Integer id;
-    private String nomeCompleto;
-    private String cpf;
-    private String tituloEleitor;
-    private String nomeMae;
-    private LocalDate dataNascimento;
-    private String telefone;
-    private String whatsapp;
-    private Integer idComunidade;
-    private String enderecoCompleto;
-    private String cep;
-    private String origemCadastro;
-    private Integer idLiderResponsavel;
-    private Integer idLiderRegional;
-    private String status;
-    private String observacoes;
-    private Long idUsuarioCadastro;
-    private LocalDateTime dataCadastro;
+     Integer id,    
+     String nomeCompleto,   
+     String cpf,    
+     String tituloEleitor,  
+     String nomeMae,    
+     LocalDate dataNascimento,  
+     String telefone,   
+     String whatsapp,   
+     Integer idComunidade,  
+     String enderecoCompleto,   
+     String cep,    
+     String origemCadastro, 
+     Integer idLiderResponsavel,    
+     Integer idLiderRegional,   
+     String status, 
+     String observacoes,    
+     Long idUsuarioCadastro,    
+     LocalDateTime dataCadastro   
 
-}
+){}

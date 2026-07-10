@@ -1,18 +1,14 @@
 package com.ecam.ecam.Cadastros.dto;
 
-import lombok.*;
-
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+import lombok.Builder;
 @Builder
-public class MacroRegiaoDTO {
 
-    private Integer id;
-    private Integer idMunicipio;
-    private String nomeMunicipio; 
-    private String nome;
-    private String regiaoApelido;
+public record MacroRegiaoDTO(
+
+    Integer id,
+    Integer idMunicipio,
+    String nomeMunicipio,
+    String nome,
+    String regiaoApelido
     
-}
+) {}

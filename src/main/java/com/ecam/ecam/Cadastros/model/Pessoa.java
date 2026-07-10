@@ -66,7 +66,7 @@ public class Pessoa {
     @Column(nullable = false, length = 50)
     private String status;
 
-    @Column(columnDefinition = "VARCHAR(MAX)")
+    @Column(columnDefinition = "TEXT")
     private String observacoes;
 
     // Assumindo a existência de uma classe Usuario
