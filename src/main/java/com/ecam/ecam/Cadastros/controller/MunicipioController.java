@@ -39,7 +39,7 @@ public class MunicipioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MunicipioDTO> atualizar(@PathVariable Integer id, @RequestBody MunicipioDTO dto) {
+    public ResponseEntity<MunicipioDTO> atuaatualizar(@PathVariable Integer id, @RequestBody MunicipioDTO dto) {
         try {
             return ResponseEntity.ok(service.atualizar(id, dto));
         } catch (RuntimeException e) {
@@ -48,8 +48,9 @@ public class MunicipioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
+    public ResponseEntity<String> deletar(@PathVariable Integer id) {
         service.deletar(id);
-        return ResponseEntity.noContent().build();
+        //return ResponseEntity.noContent().build(); 204
+        return ResponseEntity.ok("Município excluído com sucesso!"); //200
     }
 }
