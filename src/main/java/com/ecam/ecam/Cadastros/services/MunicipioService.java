@@ -1,6 +1,7 @@
 package com.ecam.ecam.Cadastros.services;
 
 import com.ecam.ecam.Cadastros.dto.MunicipioDTO;
+import com.ecam.ecam.Cadastros.exception.RecursoJaCadastradoException;
 import com.ecam.ecam.Cadastros.model.Municipio;
 import com.ecam.ecam.Cadastros.repository.MunicipioRepository;
 
@@ -30,7 +31,17 @@ public class MunicipioService {
     }
 
     public MunicipioDTO salvar(MunicipioDTO dto) {
+
+        DadosFormatados dados = retornaMaiusculo(dto.nome(), dto.uf());
+        String nomeSalvar = dados.nome(); 
+        String ufSalvar = dados.uf();   
+
+        if (repository.countByNomeIgnoreCaseAndUfIgnoreCase(nomeSalvar, ufSalvar) > 0) {
+            throw new RecursoJaCadastradoException("O município '" + nomeSalvar + "' já está cadastrado para o estado " + ufSalvar + ".");
+        }   
         Municipio entidade = converterParaEntidade(dto);
+        entidade.setNome(nomeSalvar);
+        entidade.setUf(ufSalvar);
         entidade = repository.save(entidade);
         return converterParaDTO(entidade);
     }
@@ -39,8 +50,13 @@ public class MunicipioService {
         Municipio entidadeExistente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Município não encontrado!"));
 
-        entidadeExistente.setNome(dto.nome());
-        entidadeExistente.setUf(dto.uf());
+        
+        DadosFormatados dados = retornaMaiusculo(dto.nome(), dto.uf());
+        String nomeSalvar = dados.nome(); 
+        String ufSalvar = dados.uf();   
+
+        entidadeExistente.setNome(nomeSalvar);
+        entidadeExistente.setUf(ufSalvar);
 
         return converterParaDTO(repository.save(entidadeExistente));
     }
@@ -65,5 +81,14 @@ public class MunicipioService {
                 .nome(dto.nome())
                 .uf(dto.uf())
                 .build();
+    }
+
+    public record DadosFormatados(String nome, String uf) {}
+
+    public DadosFormatados retornaMaiusculo(String nome, String uf) {
+        return new DadosFormatados(
+                nome.trim().toUpperCase(),
+                uf.trim().toUpperCase()
+        );
     }
 }
