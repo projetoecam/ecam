@@ -15,7 +15,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -40,6 +41,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             if (decodedJWT != null) {
                 String login = decodedJWT.getSubject();
                 String tokenSessao = decodedJWT.getClaim("codigoSessao").asString();
+                List<String> permissoes = decodedJWT.getClaim("permissoes").asList(String.class);
 
                 Optional<Usuario> usuarioOpt = usuarioRepository.buscarPorLogin(login);
 
@@ -47,8 +49,17 @@ public class SecurityFilter extends OncePerRequestFilter {
                     Usuario usuario = usuarioOpt.get();
 
                     if (tokenSessao.equals(usuario.getCodigo_sessao())) {
-                        var authorities = Collections
-                                .singletonList(new SimpleGrantedAuthority("ROLE_" + usuario.getPerfil().toUpperCase()));
+                        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+                        
+                        // Mantém a role original por segurança estrutural
+                        String roleNormalizada = usuario.getPerfil().toUpperCase().replace(" ", "_");
+                        authorities.add(new SimpleGrantedAuthority("ROLE_" + roleNormalizada));
+                        
+                        // Adiciona as permissões específicas recuperadas do Token
+                        if (permissoes != null) {
+                            permissoes.forEach(p -> authorities.add(new SimpleGrantedAuthority(p)));
+                        }
+
                         var authentication = new UsernamePasswordAuthenticationToken(usuario, null, authorities);
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
