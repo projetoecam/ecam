@@ -4,6 +4,8 @@ import com.ecam.ecam.Cadastros.model.Municipio;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MunicipioRepository extends JpaRepository<Municipio, Integer> {
-    // Você pode adicionar buscas customizadas depois, como buscar por UF, por exemplo:
-    // List<Municipio> findByUf(String uf);
+    
+    // Retorna true se já existir no banco uma cidade com esse nome e essa UF (ignorando maiúsculas/minúsculas)
+   //boolean existsByNomeIgnoreCaseAndUfIgnoreCase(String nome, String uf);
+   int countByNomeIgnoreCaseAndUfIgnoreCase(String nome, String uf);
 }

@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler extends RuntimeException {
 
     @ExceptionHandler(ResponseStatusException.class)
     public ProblemDetail handleResponseStatusException(ResponseStatusException ex) {
@@ -29,4 +30,27 @@ public class GlobalExceptionHandler {
         response.put("mensagem", "Usuário não possui permissão para realizar a operação.");
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
+
+    @ExceptionHandler(RecursoJaCadastradoException.class)
+    public ResponseEntity<ErroPadrao> handleRecursoJaCadastrado(RecursoJaCadastradoException ex) {
+        
+        // Monta o corpo da resposta de erro
+        ErroPadrao erro = new ErroPadrao(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Conflito de Dados",
+                ex.getMessage()
+        );
+
+        // Retorna o status 409 Conflict com o JSON do erro
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+    }
+
+    // 2. (Opcional) Record para formatar a saída do JSON de erro de forma bonita
+    public record ErroPadrao(
+            LocalDateTime timestamp,
+            Integer status,
+            String erro,
+            String mensagem
+    ) {}
 }
