@@ -1,31 +1,50 @@
-# === Compilação e Artefatos do Java ===
-# Ignora a pasta onde o Maven gera o código compilado e o arquivo .jar final
-/target/
+# ==========================================
+# Java / Maven
+# ==========================================
+target/
 
-# === Configurações de IDEs (Editores de Código) ===
-# Ignora arquivos de configuração do IntelliJ IDEA
+# ==========================================
+# IntelliJ IDEA
+# ==========================================
 .idea/
 *.iml
 
-# Ignora arquivos de configuração do VS Code
+# ==========================================
+# Visual Studio Code
+# ==========================================
 .vscode/
 
-# Ignora arquivos temporários do Eclipse
+# ==========================================
+# Eclipse
+# ==========================================
 .metadata/
 .classpath
 .project
 .settings/
 
-# === Arquivos de Log e Sistema ===
+# ==========================================
+# Logs
+# ==========================================
 *.log
+
+# ==========================================
+# Sistema Operacional
+# ==========================================
 .DS_Store
 Thumbs.db
 
-# === Arquivos de banco de dados ===
+# ==========================================
+# Banco de Dados
+# ==========================================
 *.mdf
 *.MDF
 *.ldf
 *.LDF
 *.bak
 *.BAK
-.properties
+
+# ==========================================
+# Arquivos de Configuração
+# ==========================================
+*.properties
+**/*.properties
