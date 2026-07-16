@@ -5,6 +5,7 @@ import com.ecam.ecam.login.model.Usuario;
 import com.ecam.ecam.login.repository.UsuarioRepository;
 import com.ecam.ecam.login.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +39,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('DELETAR')")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         usuarioService.deletarUsuario(id);
         return ResponseEntity.noContent().build();

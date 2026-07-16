@@ -8,3 +8,4 @@ public record MunicipioDTO(
     String nome,
     String uf
 ) {}
+
