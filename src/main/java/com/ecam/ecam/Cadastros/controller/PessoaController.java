@@ -14,18 +14,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/pessoas")
-@PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class PessoaController {
 
     private final PessoaService service;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('LER_DADOS')")
     public ResponseEntity<List<PessoaDTO>> listarTodas() {
         return ResponseEntity.ok(service.listarTodas());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('LER_DADOS')")
     public ResponseEntity<PessoaDTO> buscarPorId(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(service.buscarPorId(id));
@@ -35,12 +36,14 @@ public class PessoaController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('CADASTRAR')")
     public ResponseEntity<PessoaDTO> salvar(@RequestBody PessoaDTO dto) {
         PessoaDTO novaPessoa = service.salvar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(novaPessoa);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('EDITAR')")
     public ResponseEntity<PessoaDTO> atualizar(@PathVariable Integer id, @RequestBody PessoaDTO dto) {
         try {
             return ResponseEntity.ok(service.atualizar(id, dto));
@@ -50,6 +53,7 @@ public class PessoaController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('DELETAR') and @cadastroSecurity.podeExcluirCadastro(#id)")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         service.deletar(id);
         return ResponseEntity.noContent().build();

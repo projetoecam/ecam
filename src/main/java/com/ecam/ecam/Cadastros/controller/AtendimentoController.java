@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,17 +21,19 @@ public class AtendimentoController {
     private final AtendimentoService service;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('LER_DADOS')")
     public ResponseEntity<List<AtendimentoDTO>> listarTodos() {
         return ResponseEntity.ok(service.listarTodos());
     }
 
-    // Endpoint extra para buscar o histórico de uma pessoa
     @GetMapping("/pessoa/{idPessoa}")
+    @PreAuthorize("hasAuthority('LER_DADOS')")
     public ResponseEntity<List<AtendimentoDTO>> listarPorPessoa(@PathVariable Integer idPessoa) {
         return ResponseEntity.ok(service.listarPorPessoa(idPessoa));
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('LER_DADOS')")
     public ResponseEntity<AtendimentoDTO> buscarPorId(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(service.buscarPorId(id));
@@ -40,12 +43,14 @@ public class AtendimentoController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('CADASTRAR')")
     public ResponseEntity<AtendimentoDTO> salvar(@RequestBody AtendimentoDTO dto) {
         AtendimentoDTO novoAtendimento = service.salvar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoAtendimento);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('EDITAR')")
     public ResponseEntity<AtendimentoDTO> atualizar(@PathVariable Integer id, @RequestBody AtendimentoDTO dto) {
         try {
             return ResponseEntity.ok(service.atualizar(id, dto));
@@ -55,6 +60,7 @@ public class AtendimentoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('DELETAR')")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         service.deletar(id);
         return ResponseEntity.noContent().build();

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,11 +20,13 @@ public class MunicipioController {
     private final MunicipioService service;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('LER_DADOS')")
     public ResponseEntity<List<MunicipioDTO>> listarTodos() {
         return ResponseEntity.ok(service.listarTodos());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('LER_DADOS')")
     public ResponseEntity<MunicipioDTO> buscarPorId(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(service.buscarPorId(id));
@@ -33,12 +36,14 @@ public class MunicipioController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('CADASTRAR')")
     public ResponseEntity<MunicipioDTO> salvar(@RequestBody MunicipioDTO dto) {
         MunicipioDTO novoMunicipio = service.salvar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoMunicipio);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('EDITAR')")
     public ResponseEntity<MunicipioDTO> atuaatualizar(@PathVariable Integer id, @RequestBody MunicipioDTO dto) {
         try {
             return ResponseEntity.ok(service.atualizar(id, dto));

@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.ecam.ecam.login.model.PerfilAcesso;
 import com.ecam.ecam.login.model.Permissao;
 import com.ecam.ecam.login.model.Usuario;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,20 +26,18 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
-            List<String> permissoesStr = new ArrayList<>();
-            PerfilAcesso perfilAcesso = PerfilAcesso.buscarPorNome(usuario.getPerfil());
-
-            if (perfilAcesso != null) {
-                permissoesStr = perfilAcesso.getPermissoes().stream()
-                        .map(Permissao::name)
-                        .collect(Collectors.toList());
-            }
+            // Agora percorremos dinamicamente todos os perfis e extraímos os Nomes das Permissões
+            List<String> permissoesStr = usuario.getPerfis().stream()
+                    .flatMap(perfil -> perfil.getPermissoes().stream())
+                    .map(Permissao::getNome)
+                    .distinct() // Evita permissões duplicadas no token
+                    .collect(Collectors.toList());
 
             return JWT.create()
                     .withIssuer("ecam-api")
                     .withSubject(usuario.getLogin_usuario())
                     .withClaim("codigoSessao", usuario.getCodigo_sessao())
-                    .withClaim("permissoes", permissoesStr) // Nova claim no JWT
+                    .withClaim("permissoes", permissoesStr) // Injeta a lista dinâmica de permissões no Token
                     .withExpiresAt(gerarDataExpiracao())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {

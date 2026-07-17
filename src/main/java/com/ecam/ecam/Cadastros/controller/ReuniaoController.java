@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,17 +20,19 @@ public class ReuniaoController {
     private final ReuniaoService service;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('LER_DADOS')")
     public ResponseEntity<List<ReuniaoDTO>> listarTodas() {
         return ResponseEntity.ok(service.listarTodas());
     }
 
-    // Endpoint extra para buscar o histórico de reuniões em uma comunidade
     @GetMapping("/comunidade/{idComunidade}")
+    @PreAuthorize("hasAuthority('LER_DADOS')")
     public ResponseEntity<List<ReuniaoDTO>> listarPorComunidade(@PathVariable Integer idComunidade) {
         return ResponseEntity.ok(service.listarPorComunidade(idComunidade));
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('LER_DADOS')")
     public ResponseEntity<ReuniaoDTO> buscarPorId(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(service.buscarPorId(id));
@@ -39,12 +42,14 @@ public class ReuniaoController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('CADASTRAR')")
     public ResponseEntity<ReuniaoDTO> salvar(@RequestBody ReuniaoDTO dto) {
         ReuniaoDTO novaReuniao = service.salvar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(novaReuniao);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('EDITAR')")
     public ResponseEntity<ReuniaoDTO> atualizar(@PathVariable Integer id, @RequestBody ReuniaoDTO dto) {
         try {
             return ResponseEntity.ok(service.atualizar(id, dto));
@@ -54,6 +59,7 @@ public class ReuniaoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('DELETAR')")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         service.deletar(id);
         return ResponseEntity.noContent().build();
