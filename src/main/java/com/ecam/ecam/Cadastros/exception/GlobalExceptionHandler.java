@@ -1,5 +1,6 @@
 package com.ecam.ecam.Cadastros.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler extends RuntimeException {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResponseStatusException.class)
     public ProblemDetail handleResponseStatusException(ResponseStatusException ex) {
@@ -33,8 +34,6 @@ public class GlobalExceptionHandler extends RuntimeException {
 
     @ExceptionHandler(RecursoJaCadastradoException.class)
     public ResponseEntity<ErroPadrao> handleRecursoJaCadastrado(RecursoJaCadastradoException ex) {
-        
-        // Monta o corpo da resposta de erro
         ErroPadrao erro = new ErroPadrao(
                 LocalDateTime.now(),
                 HttpStatus.CONFLICT.value(),
@@ -42,11 +41,22 @@ public class GlobalExceptionHandler extends RuntimeException {
                 ex.getMessage()
         );
 
-        // Retorna o status 409 Conflict com o JSON do erro
         return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
     }
 
-    // 2. (Opcional) Record para formatar a saída do JSON de erro de forma bonita
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErroPadrao> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        ErroPadrao erro = new ErroPadrao(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Conflito de Integridade",
+                "Não é possível excluir este registro, pois ele possui vínculos com outros dados do sistema (ex: Demandas cadastradas)."
+        );
+        
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+    }
+
     public record ErroPadrao(
             LocalDateTime timestamp,
             Integer status,

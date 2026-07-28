@@ -13,6 +13,6 @@ public class UsuarioDTO {
     private String login_usuario; 
     private String senha_hash;    
     private String perfil;
-    private boolean ativo;
+    private Boolean ativo;
 
 }

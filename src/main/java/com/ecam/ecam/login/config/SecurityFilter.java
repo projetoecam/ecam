@@ -51,9 +51,11 @@ public class SecurityFilter extends OncePerRequestFilter {
                     if (tokenSessao.equals(usuario.getCodigo_sessao())) {
                         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
                         
-                        // Mantém a role original por segurança estrutural
-                        String roleNormalizada = usuario.getPerfil().toUpperCase().replace(" ", "_");
-                        authorities.add(new SimpleGrantedAuthority("ROLE_" + roleNormalizada));
+                        // Agora percorremos os perfis N-N do usuário para registar as Roles
+                        usuario.getPerfis().forEach(perfil -> {
+                            String roleNormalizada = perfil.getNome().toUpperCase().replace(" ", "_");
+                            authorities.add(new SimpleGrantedAuthority("ROLE_" + roleNormalizada));
+                        });
                         
                         // Adiciona as permissões específicas recuperadas do Token
                         if (permissoes != null) {

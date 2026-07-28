@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,17 +21,19 @@ public class EncaminhamentoController {
     private final EncaminhamentoService service;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('LER_DADOS')")
     public ResponseEntity<List<EncaminhamentoDTO>> listarTodos() {
         return ResponseEntity.ok(service.listarTodos());
     }
 
-    // Endpoint extra para facilitar a busca de histórico por Demanda
     @GetMapping("/demanda/{idDemanda}")
+    @PreAuthorize("hasAuthority('LER_DADOS')")
     public ResponseEntity<List<EncaminhamentoDTO>> listarPorDemanda(@PathVariable Integer idDemanda) {
         return ResponseEntity.ok(service.listarPorDemanda(idDemanda));
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('LER_DADOS')")
     public ResponseEntity<EncaminhamentoDTO> buscarPorId(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(service.buscarPorId(id));
@@ -40,12 +43,14 @@ public class EncaminhamentoController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('CADASTRAR')")
     public ResponseEntity<EncaminhamentoDTO> salvar(@RequestBody EncaminhamentoDTO dto) {
         EncaminhamentoDTO novoEncaminhamento = service.salvar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoEncaminhamento);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('EDITAR')")
     public ResponseEntity<EncaminhamentoDTO> atualizar(@PathVariable Integer id, @RequestBody EncaminhamentoDTO dto) {
         try {
             return ResponseEntity.ok(service.atualizar(id, dto));
@@ -55,6 +60,7 @@ public class EncaminhamentoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('DELETAR')")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         service.deletar(id);
         return ResponseEntity.noContent().build();

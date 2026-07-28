@@ -1,55 +1,48 @@
 package com.ecam.ecam.login.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
+@Entity
+@Table(name = "tb_perfil_acesso")
 @Getter
-public enum PerfilAcesso {
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class PerfilAcesso {
 
-    ADMINISTRADOR("Administrador", Arrays.asList(
-            Permissao.LER_DADOS, Permissao.CADASTRAR, Permissao.EDITAR, 
-            Permissao.DELETAR, Permissao.EXPORTAR, Permissao.COPIAR, Permissao.APROVAR_ALTERACAO)),
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    COORDENADOR_GERAL("Coordenador Geral", Arrays.asList(
-            Permissao.LER_DADOS, Permissao.CADASTRAR, Permissao.EDITAR, 
-            Permissao.DELETAR, Permissao.EXPORTAR, Permissao.COPIAR, Permissao.APROVAR_ALTERACAO)),
+    @Column(unique = true, nullable = false)
+    private String nome;
 
-    COORDENADOR_EQUIPE("Coordenador de Equipe", Arrays.asList(
-            Permissao.LER_DADOS, Permissao.CADASTRAR, Permissao.EDITAR, 
-            Permissao.DELETAR, Permissao.APROVAR_ALTERACAO)),
+    private String descricao;
 
-    OPERADOR_CADASTRO("Operador de Cadastro", Arrays.asList(
-            Permissao.LER_DADOS, Permissao.CADASTRAR)), // Edição será via tabela temporária
-
-    OPERADOR_ATENDIMENTO("Operador de Atendimento", Arrays.asList(
-            Permissao.LER_DADOS, Permissao.CADASTRAR, Permissao.EDITAR)),
-
-    JURIDICO("Jurídico", Arrays.asList(
-            Permissao.LER_DADOS, Permissao.CADASTRAR, Permissao.EDITAR)),
-
-    PRESTACAO_CONTAS("Prestação de Contas", Arrays.asList(
-            Permissao.LER_DADOS, Permissao.CADASTRAR, Permissao.EDITAR)),
-
-    COMUNICACAO("Comunicação", Arrays.asList(
-            Permissao.LER_DADOS, Permissao.CADASTRAR, Permissao.EDITAR));
-
-    private final String nomePerfilDb;
-    private final List<Permissao> permissoes;
-
-    PerfilAcesso(String nomePerfilDb, List<Permissao> permissoes) {
-        this.nomePerfilDb = nomePerfilDb;
-        this.permissoes = permissoes;
-    }
-
-    public static PerfilAcesso buscarPorNome(String nome) {
-        for (PerfilAcesso perfil : values()) {
-            if (perfil.getNomePerfilDb().equalsIgnoreCase(nome)) {
-                return perfil;
-            }
-        }
-        return null; 
-    }
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "tb_perfil_permissao",
+            joinColumns = @JoinColumn(name = "perfil_id"),
+            inverseJoinColumns = @JoinColumn(name = "permissao_id")
+    )
+    private Set<Permissao> permissoes = new HashSet<>();
 }

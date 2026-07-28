@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,11 +21,13 @@ public class ComunidadeController {
     private final ComunidadeService service;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('LER_DADOS')")
     public ResponseEntity<List<ComunidadeDTO>> listarTodas() {
         return ResponseEntity.ok(service.listarTodas());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('LER_DADOS')")
     public ResponseEntity<ComunidadeDTO> buscarPorId(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(service.buscarPorId(id));
@@ -34,12 +37,14 @@ public class ComunidadeController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('CADASTRAR')")
     public ResponseEntity<ComunidadeDTO> salvar(@RequestBody ComunidadeDTO dto) {
         ComunidadeDTO novaComunidade = service.salvar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(novaComunidade);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('EDITAR')")
     public ResponseEntity<ComunidadeDTO> atualizar(@PathVariable Integer id, @RequestBody ComunidadeDTO dto) {
         try {
             return ResponseEntity.ok(service.atualizar(id, dto));
@@ -49,6 +54,7 @@ public class ComunidadeController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('DELETAR')")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         service.deletar(id);
         return ResponseEntity.noContent().build();

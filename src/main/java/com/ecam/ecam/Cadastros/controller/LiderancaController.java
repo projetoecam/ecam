@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,11 +22,13 @@ public class LiderancaController {
     private final LiderancaService service;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('LER_DADOS')")
     public ResponseEntity<List<LiderancaDTO>> listarTodas() {
         return ResponseEntity.ok(service.listarTodas());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('LER_DADOS')")
     public ResponseEntity<LiderancaDTO> buscarPorId(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(service.buscarPorId(id));
@@ -35,6 +38,7 @@ public class LiderancaController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('CADASTRAR')")
     public ResponseEntity<LiderancaDTO> salvar(@RequestBody LiderancaDTO dto) {
         try {
             LiderancaDTO novaLideranca = service.salvar(dto);
@@ -45,6 +49,7 @@ public class LiderancaController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('EDITAR')")
     public ResponseEntity<LiderancaDTO> atualizar(@PathVariable Integer id, @RequestBody LiderancaDTO dto) {
         try {
             return ResponseEntity.ok(service.atualizar(id, dto));
@@ -54,6 +59,7 @@ public class LiderancaController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('DELETAR')")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         service.deletar(id);
         return ResponseEntity.noContent().build();
