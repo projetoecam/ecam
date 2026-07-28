@@ -53,9 +53,9 @@ public class MunicipioController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('DELETAR')")
     public ResponseEntity<String> deletar(@PathVariable Integer id) {
         service.deletar(id);
-        //return ResponseEntity.noContent().build(); 204
-        return ResponseEntity.ok("Município excluído com sucesso!"); //200
+        return ResponseEntity.ok("Município excluído com sucesso!");
     }
 }
